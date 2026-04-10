@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<!-- ★ 防重入保護：本頁為終點，永不主動 redirect -->
+<!-- ★ 本頁為行動版終點，不包含任何自動 redirect -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>東海大學食品科學系｜解碼未來食品，AI 時代最搶手的理科</title>
 <meta name="description" content="東海大學食品科學系結合 AI 數據分析、流變學與生物科技。操作百萬儀器、赴日移地教學，畢業生強勢錄取台清交成研究所。">
@@ -658,15 +658,40 @@
 
 <script>
   // 捲動浮現動畫
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-  // ★ Fallback：頁面載入 800ms 後強制顯示所有元素，防止黑畫面
-  setTimeout(function(){
-    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('on'); });
+  const revealElements = document.querySelectorAll('.reveal');
+
+  if ('IntersectionObserver' in window) {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('on');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.12 });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+  } else {
+    revealElements.forEach(el => el.classList.add('on'));
+  }
+
+  // Fallback：避免部分手機瀏覽器觀察器延遲，導致內容未顯示
+  setTimeout(() => {
+    revealElements.forEach(el => el.classList.add('on'));
   }, 800);
 
   // FAQ 手風琴
   document.querySelectorAll('.faq-q').forEach(btn => {
-    btn.addEventListener('click', 
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      if (!item) return;
+
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(openItem => {
+        openItem.classList.remove('open');
+      });
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>
