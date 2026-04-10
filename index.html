@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
@@ -128,6 +128,13 @@
     box-shadow: 0 0 14px rgba(246,211,101,0.1);
   }
   .honor-note { font-size: 0.8rem; color: var(--text-muted); line-height: 1.7; }
+  .honor-link {
+    display: inline-block; margin-top: 16px;
+    background: linear-gradient(135deg, var(--neon-gold), var(--gold-deep));
+    color: #080f1e; padding: 11px 26px; border-radius: 50px;
+    font-size: 0.88rem; font-weight: 800; text-decoration: none;
+    box-shadow: 0 4px 16px rgba(246,211,101,0.3);
+  }
 
   /* Sections */
   .sec { padding: 48px 22px; }
@@ -150,6 +157,8 @@
   .course-card p  { font-size: 0.88rem; color: var(--text-muted); line-height: 1.75; }
   .tag-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
   .tag { background: rgba(0,210,255,0.07); border: 1px solid rgba(0,210,255,0.2); color: var(--tech-blue); font-size: 0.75rem; padding: 4px 11px; border-radius: 50px; font-weight: 600; }
+  /* Gold tag variant */
+  .tag-gold { background: rgba(246,211,101,0.07); border: 1px solid rgba(246,211,101,0.25); color: var(--neon-gold); font-size: 0.75rem; padding: 4px 11px; border-radius: 50px; font-weight: 600; }
 
   /* Lab */
   .safety-banner {
@@ -164,6 +173,11 @@
   .lab-photo:hover img { transform: scale(1.03); }
   .lab-block h3 { font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 8px; line-height: 1.4; }
   .lab-block p  { font-size: 0.9rem; color: var(--text-muted); line-height: 1.75; margin-bottom: 12px; }
+
+  /* Campus Photo Block */
+  .campus-photo { width: 100%; border-radius: var(--radius); overflow: hidden; margin-bottom: 18px; box-shadow: 0 12px 40px rgba(0,0,0,0.6); }
+  .campus-photo img { width: 100%; height: auto; display: block; transition: transform 0.5s ease; }
+  .campus-photo:hover img { transform: scale(1.04); }
 
   /* Timeline */
   .timeline { display: flex; flex-direction: column; position: relative; padding-left: 32px; }
@@ -199,6 +213,15 @@
   .japan-tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
   .japan-tag { background: rgba(246,211,101,0.1); border: 1px solid rgba(246,211,101,0.3); color: var(--neon-gold); font-size: 0.78rem; font-weight: 700; padding: 5px 13px; border-radius: 50px; }
 
+  /* Highlight strip */
+  .highlight-strip {
+    background: linear-gradient(135deg, rgba(0,210,255,0.06), rgba(58,123,213,0.06));
+    border: 1px solid rgba(0,210,255,0.15); border-radius: var(--radius);
+    padding: 22px 20px; margin-bottom: 14px;
+  }
+  .highlight-strip h3 { font-size: 1rem; font-weight: 800; color: var(--tech-blue); margin-bottom: 6px; }
+  .highlight-strip p { font-size: 0.86rem; color: var(--text-muted); line-height: 1.75; }
+
   /* FAQ */
   .faq-list { display: flex; flex-direction: column; gap: 14px; }
   .faq-item { background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius); overflow: hidden; }
@@ -230,6 +253,11 @@
   /* Footer */
   footer { padding: 32px 22px; background: #040a14; border-top: 1px solid var(--glass-border); text-align: center; color: var(--text-muted); font-size: 0.78rem; line-height: 2; }
   footer a { color: var(--tech-blue); text-decoration: none; }
+
+  /* Award photo block */
+  .award-photo { width: 100%; border-radius: var(--radius); overflow: hidden; margin-bottom: 18px; box-shadow: 0 12px 32px rgba(0,0,0,0.5); }
+  .award-photo img { width: 100%; height: auto; display: block; object-fit: cover; transition: transform 0.4s; }
+  .award-photo:hover img { transform: scale(1.03); }
 </style>
 </head>
 <body>
@@ -245,7 +273,7 @@
     <a href="https://foodsci.thu.edu.tw/" target="_blank" class="nav-cta">立即了解 &rarr;</a>
   </nav>
 
-  <!-- Hero (S__8609800_0.jpg 背景) -->
+  <!-- Hero (S__8609800_0.jpg 背景：AI東海學以創新宣傳圖) -->
   <section class="hero">
     <div class="hero-bg"></div>
     <div class="hero-inner reveal">
@@ -294,14 +322,18 @@
       <div class="uni-badge">&#128998; 成功大學</div>
     </div>
     <p class="honor-note">食品科學系 &times; 生技醫療所 &times; 化工所 &times; 農化所&hellip;橫跨多領域全面錄取</p>
+    <a href="https://foodsci.thu.edu.tw/p/412-1056-10788.php" target="_blank" class="honor-link">
+      &#128203; 查看歷屆榜單
+    </a>
   </div>
 
-  <!-- 三大學習領域 -->
+  <!-- 五大學習領域（原三大，新增兩個） -->
   <section class="sec reveal">
     <p class="sec-eyebrow">Curriculum &times; AI</p>
-    <h2>三大領域，<br>打破理科界線</h2>
+    <h2>五大領域，<br>打破理科界線</h2>
     <p class="sec-lead">不再憑感覺調配食物——在這裡，你會學會用數學描述「好吃」，用 AI 預測製程，用顯微鏡看分子的一生。</p>
     <div class="course-list">
+
       <div class="course-card reveal">
         <div class="course-num">01</div>
         <h3>&#129302; AI 建模 &times; 食品流變學</h3>
@@ -313,6 +345,7 @@
           <span class="tag">流變學</span>
         </div>
       </div>
+
       <div class="course-card reveal">
         <div class="course-num">02</div>
         <h3>&#129516; 微生物基因組 &times; 精準營養</h3>
@@ -323,10 +356,11 @@
           <span class="tag">代謝組學</span>
         </div>
       </div>
+
       <div class="course-card reveal">
         <div class="course-num">03</div>
-        <h3>&#128301; AI 感官科學 &times; 食安品保</h3>
-        <p>食安是科學的底線。結合 GC、光譜儀與非破壞性檢測，以<span class="hi-blue">電腦視覺 AI</span> 輔助感官品評，建立食品品質的<span class="hi-gold">客觀量化指標</span>，培育頂尖品保分析師。</p>
+        <h3>&#128737;&#65039; 食品安全守護</h3>
+        <p>食安是科學的底線。結合 GC、光譜儀與非破壞性檢測，以<span class="hi-blue">電腦視覺 AI</span> 輔助感官品評，建立食品品質的<span class="hi-gold">客觀量化指標</span>，培育頂尖食安分析師。</p>
         <div class="tag-row">
           <span class="tag">GC 氣相層析</span>
           <span class="tag">光譜分析</span>
@@ -334,6 +368,37 @@
           <span class="tag">AI 品評</span>
         </div>
       </div>
+
+      <!-- 新增領域 04：食品智慧化管理與大數據行銷 -->
+      <div class="course-card reveal" style="border-left: none;">
+        <div class="course-card" style="border:none; padding:0; background:none;">
+        </div>
+        <div class="course-num">04</div>
+        <h3>&#128202; 食品智慧化管理與大數據行銷</h3>
+        <p>結合 <span class="hi-blue">ERP 智慧製造</span>、消費者行為大數據與社群分析，以 AI 精準定位市場需求。學習從研發到上市的完整食品供應鏈管理，讓好產品也懂得如何被消費者看見。</p>
+        <div class="tag-row">
+          <span class="tag">大數據分析</span>
+          <span class="tag">AI 行銷</span>
+          <span class="tag">供應鏈管理</span>
+          <span class="tag">消費者科學</span>
+          <span class="tag-gold">跨域整合</span>
+        </div>
+      </div>
+
+      <!-- 新增領域 05：銀髮族與機能性食品 -->
+      <div class="course-card reveal">
+        <div class="course-num">05</div>
+        <h3>&#129498; 銀髮族與機能性食品</h3>
+        <p>面對台灣高齡化浪潮，開發兼顧<span class="hi-gold">營養密度</span>與<span class="hi-blue">吞嚥友善</span>的高齡族群專屬食品。整合機能性成分（多酚、益生菌、膠原蛋白）、質地設計與臨床營養評估，搶攻台灣銀髮食品兆元商機。</p>
+        <div class="tag-row">
+          <span class="tag">機能性成分</span>
+          <span class="tag">質地設計</span>
+          <span class="tag">高齡營養</span>
+          <span class="tag">益生菌</span>
+          <span class="tag-gold">銀髮商機</span>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -351,27 +416,25 @@
       實驗室規範：所有物理化學與生物實驗，人員安全防護與工安規範永遠是最高準則。
     </div>
 
-    <!-- S__8609799_0.jpg -->
+    <!-- 流變儀區塊（無具體實驗照片，以文字卡片呈現） -->
     <div class="lab-block reveal">
-      <div class="lab-photo">
-        <img src="./S__8609799_0.jpg" alt="東海大學食品科學系流變分析實景"
-             onerror="this.src='https://via.placeholder.com/480x360/0A1628/00d2ff?text=流變分析實景'"
-             loading="lazy">
+      <div style="background:var(--bg-card); border:1px solid var(--glass-border); border-radius:var(--radius); padding:22px 20px; border-left:4px solid var(--tech-blue); margin-bottom:18px;">
+        <h3 style="font-size:1.2rem; font-weight:800; color:#fff; margin-bottom:8px; line-height:1.4">&#128208; 流變儀 &times; 物性大數據<br>解碼口感的物理學</h3>
+        <div class="tag-row" style="margin-bottom:10px">
+          <span class="tag">MCR 流變儀</span>
+          <span class="tag">質地分析儀</span>
+          <span class="tag">黏彈力學</span>
+        </div>
+        <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.75">
+          從珍珠奶茶的 Q 彈到美乃滋的乳化穩定性，都源自精確的物理化學參數。學生實際操作 <span class="hi-blue">MCR 流變儀</span>，解析食品的 <span class="hi-gold">儲存模數 G'</span>（彈性）與 <span class="hi-gold">損耗模數 G''</span>（黏滯），將「好吃的感覺」轉化為可量化的科學模型。
+        </p>
       </div>
-      <h3>&#128208; 流變儀 &times; 物性大數據<br>解碼口感的物理學</h3>
-      <div class="tag-row" style="margin-bottom:10px">
-        <span class="tag">Anton Paar 流變儀</span>
-        <span class="tag">質地分析儀</span>
-        <span class="tag">黏彈力學</span>
-      </div>
-      <p>從珍珠奶茶的 Q 彈到美乃滋的乳化穩定性，都源自精確的物理化學參數。學生實際操作 <span class="hi-blue">Anton Paar MCR 流變儀</span>，解析食品的 <span class="hi-gold">儲存模數 G'</span>（彈性）與 <span class="hi-gold">損耗模數 G''</span>（黏滯），將「好吃的感覺」轉化為可量化的科學模型。</p>
     </div>
 
-    <!-- S__8609801_0.jpg -->
+    <!-- 競賽得獎區塊（S__8609801_0.jpg：金獎頒獎照） -->
     <div class="lab-block reveal">
-      <div class="lab-photo">
-        <img src="./S__8609801_0.jpg" alt="東海大學食品科學系競賽得獎實景"
-             onerror="this.src='https://via.placeholder.com/480x360/0A1628/f6d365?text=競賽得獎實景'"
+      <div class="award-photo">
+        <img src="./S__8609801_0.jpg" alt="東海大學食品科學系榮獲全國大專院校精準健康產業創新創業競賽金獎頒獎實景"
              loading="lazy">
       </div>
       <h3>&#127885; 全國競賽常勝軍<br>實力說話的榮耀</h3>
@@ -380,7 +443,7 @@
         <span class="tag">金獎</span>
         <span class="tag">跨域研究</span>
       </div>
-      <p>東海食科學生屢獲全國競賽大獎，以紮實的食品科學與<span class="hi-blue">跨域 AI 技術</span>，在「全國大專院校精準健康產業創新創業競賽」斬獲<span class="hi-gold">金獎殊榮</span>。這是課堂知識與實戰能力完美整合的最佳見證。</p>
+      <p>東海食科學生屢獲全國競賽大獎，以紮實的食品科學與<span class="hi-blue">跨域 AI 技術</span>，在「全國大專院校精準健康產業創新創業競賽」斬獲<span class="hi-gold">金獎殊榮（獎金三萬元）</span>。這是課堂知識與實戰能力完美整合的最佳見證。</p>
     </div>
 
     <!-- 高壓均質機文字區塊 -->
@@ -447,6 +510,54 @@
     </div>
   </section>
 
+  <!-- 校園亮點：路思義教堂（S__8609799_0.jpg） -->
+  <section class="sec" style="padding-top:12px; padding-bottom:12px;">
+    <p class="sec-eyebrow reveal">Campus Life &middot; 校園生活</p>
+    <h2 class="reveal" style="margin-bottom:12px">全台最美校園<br>路思義教堂</h2>
+    <div class="campus-photo reveal">
+      <img src="./S__8609799_0.jpg" alt="東海大學路思義教堂，全台最美大學校園地標，由貝聿銘設計"
+           loading="lazy">
+    </div>
+    <p class="reveal" style="font-size:0.9rem; color:var(--text-muted); line-height:1.8; margin-bottom:16px;">
+      東海大學以<span class="hi-gold">路思義教堂</span>聞名全台灣，這座由世界級建築大師<span class="hi-blue">貝聿銘</span>主持設計、雙曲面薄殼結構的教堂，被譽為台灣最具代表性的現代建築之一。占地遼闊的綠地、牧場、蓮花池構成台中最療癒的求學環境。
+    </p>
+    <div class="tag-row reveal">
+      <span class="tag">貝聿銘建築</span>
+      <span class="tag">台灣最美校園</span>
+      <span class="tag">台中西屯</span>
+      <span class="tag-gold">東海牧場鮮乳</span>
+    </div>
+  </section>
+
+  <!-- 高中生專屬亮點 -->
+  <section class="sec" style="padding-top: 20px;">
+    <p class="sec-eyebrow reveal">For High School Students</p>
+    <h2 class="reveal" style="margin-bottom:18px">給高中生的<br>5 大選擇理由</h2>
+
+    <div class="reveal">
+      <div class="highlight-strip">
+        <h3>&#127381; 入學即接觸 AI 工具</h3>
+        <p>大一開始導入 Python 資料分析與 AI 應用，不用等到研究所才玩到 AI，讓你比同齡競爭者早三年累積實戰技能。</p>
+      </div>
+      <div class="highlight-strip">
+        <h3>&#128295; 大學部就能操作百萬儀器</h3>
+        <p>雷射粒徑分析儀、流變儀、螢光光譜儀、質地分析儀……這些通常要研究所才能碰到的儀器，東海食科大學生就能上手操作，履歷直接脫穎而出。</p>
+      </div>
+      <div class="highlight-strip">
+        <h3>&#127758; 大三直飛日本移地教學</h3>
+        <p>不是旅遊，是真實走進 Kewpie、Suntory 等日本食品龍頭企業的研發現場，回台灣你的視野就已超越同齡人。</p>
+      </div>
+      <div class="highlight-strip">
+        <h3>&#127942; 競賽得獎 × 論文發表</h3>
+        <p>全國精準健康產業創新競賽金獎、SCI 期刊論文發表紀錄，讓你的大學四年留下可量化的成就，申請研究所時底氣十足。</p>
+      </div>
+      <div class="highlight-strip">
+        <h3>&#128640; 食品 × AI × 生技三重護照</h3>
+        <p>畢業生不只進食品業——生技、製藥、醫療器材、農業科技、AI 新創都是出口，跨域能力讓你的選擇無上限。</p>
+      </div>
+    </div>
+  </section>
+
   <!-- 職涯出路 -->
   <section class="sec" style="padding-top:12px">
     <p class="sec-eyebrow reveal">Career Paths</p>
@@ -472,6 +583,16 @@
         <div class="career-icon">&#127891;</div>
         <h4>研究所深造</h4>
         <p>台清交成研究所首選候選人</p>
+      </div>
+      <div class="career-card">
+        <div class="career-icon">&#129498;</div>
+        <h4>銀髮食品開發</h4>
+        <p>高齡機能食品、吞嚥友善設計</p>
+      </div>
+      <div class="career-card">
+        <div class="career-icon">&#128736;&#65039;</div>
+        <h4>智慧製造工程師</h4>
+        <p>食品 AI 品管、大數據行銷</p>
       </div>
     </div>
   </section>
@@ -499,7 +620,15 @@
       </div>
       <div class="faq-item">
         <button class="faq-q">東海在台中，生活環境如何？<span class="arrow">&#9660;</span></button>
-        <div class="faq-a">東海大學以路思義教堂聞名全台，被評為全台最美大學校園之一。台中生活機能優越，美食豐富、交通方便，是許多學生心目中的理想求學地點。</div>
+        <div class="faq-a">東海大學以路思義教堂聞名全台，被評為全台最美大學校園之一。台中生活機能優越，美食豐富、交通方便，校內還有東海牧場與東海書苑，是許多學生心目中的理想求學地點。</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">銀髮食品領域真的有前景嗎？<span class="arrow">&#9660;</span></button>
+        <div class="faq-a">台灣已於 2025 年進入超高齡社會（65 歲以上人口超過 20%），銀髮族機能性食品需求急速增長，政府與產業界均大量投入。東海食科提前佈局此領域，讓你畢業即站上最熱門的浪頭。</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">食品智慧化行銷是什麼？跟傳統食品業有何不同？<span class="arrow">&#9660;</span></button>
+        <div class="faq-a">傳統食品業靠業務經驗；智慧化行銷結合消費者大數據、社群分析與 AI 精準投放，讓食品從研發、定價到上市都有數據支撐。這是食品 2.0 時代最需要的複合型人才。</div>
       </div>
     </div>
   </section>
