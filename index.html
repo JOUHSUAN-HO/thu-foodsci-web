@@ -2,8 +2,8 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<!-- ★ 防重入保護：本頁為行動版終點，立即標記 pass，避免學校官網跳轉 script 造成無限迴圈 -->
-<script>sessionStorage.setItem("pass","1");</script>
+<!-- ★ 防重入保護 v2：本頁為終點，永不主動 redirect，徹底杜絕迴圈 -->
+<!-- 改用 URL ?ref=thu 參數判斷，不依賴 sessionStorage，私密瀏覽也正常 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>東海大學食品科學系｜解碼未來食品，AI 時代最搶手的理科</title>
 <meta name="description" content="東海大學食品科學系結合 AI 數據分析、流變學與生物科技。操作百萬儀器、赴日移地教學，畢業生強勢錄取台清交成研究所。">
@@ -641,11 +641,11 @@
     <p>不只是喜歡吃，更要懂得製造與創新。<br>東海大學食品科學系，等你來改變台灣食品產業的未來。</p>
     <div class="cta-stack">
       <a href="https://foodsci.thu.edu.tw/" target="_blank" class="cta-main">&#128640; 前往官方網站了解更多</a>
-      <a href="mailto:foodsci@thu.edu.tw" class="cta-sec">&#9993;&#65039; 寫信詢問招生資訊</a>
+      <a href="/cdn-cgi/l/email-protection#81e7eeeee5f2e2e8c1f5e9f4afe4e5f4aff5f6" class="cta-sec">&#9993;&#65039; 寫信詢問招生資訊</a>
     </div>
     <div class="contact-info">
       <p>&#128222; <a href="tel:0423590290">04-2359-0290</a></p>
-      <p>&#9993;&#65039; <a href="mailto:foodsci@thu.edu.tw">foodsci@thu.edu.tw</a></p>
+      <p>&#9993;&#65039; <a href="/cdn-cgi/l/email-protection#274148484354444e67534f5209424352095350"><span class="__cf_email__" data-cfemail="1a7c75757e6979735a6e726f347f7e6f346e6d">[email&#160;protected]</span></a></p>
       <p>&#128205; 40704 台中市西屯區臺灣大道四段1727號</p>
     </div>
   </section>
@@ -657,13 +657,7 @@
     <p style="margin-top:8px; color:#4a5568;">&copy; 2026 東海大學食品科學系 &middot; All Rights Reserved</p>
   </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // 捲動浮現動畫
   const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-  // FAQ 手風琴
-  document.querySelectorAll('.faq-q').forEach(btn => {
-    btn.addEventListener('click', 
+    entries.forEach
