@@ -2,6 +2,8 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
+<!-- ★ 防重入保護：本頁為行動版終點，立即標記 pass，避免學校官網跳轉 script 造成無限迴圈 -->
+<script>sessionStorage.setItem("pass","1");</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>東海大學食品科學系｜解碼未來食品，AI 時代最搶手的理科</title>
 <meta name="description" content="東海大學食品科學系結合 AI 數據分析、流變學與生物科技。操作百萬儀器、赴日移地教學，畢業生強勢錄取台清交成研究所。">
@@ -664,14 +666,4 @@
 
   // FAQ 手風琴
   document.querySelectorAll('.faq-q').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const item = btn.closest('.faq-item');
-      const isOpen = item.classList.contains('open');
-      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-      if (!isOpen) item.classList.add('open');
-    });
-  });
-</script>
-
-</body>
-</html>
+    btn.addEventListener('click', 
