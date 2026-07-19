@@ -4,574 +4,783 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>東海大學食品科學系｜Department of Food Science, Tunghai University</title>
-<meta name="description" content="東海大學食品科學系創系逾四十年，涵蓋食品科技、食品安全與 AI 智慧科技、食品產業管理三大領域，培育兼具食品科學專業與數位創新素養的人才。">
-<meta name="theme-color" content="#0A2E5C">
+<meta name="description" content="東海大學食品科學系創系逾四十年，涵蓋食品科技、食品安全與 AI 智慧科技、食品產業管理三大領域。">
+<meta name="theme-color" content="#000000">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
+/* ═════════════════════════════════════════════════════════════
+   VIGNELLI × MÜLLER-BROCKMANN
+   White / Black / Swiss Red · Rigid grid · Helvetica-family sans
+   ═════════════════════════════════════════════════════════════ */
 :root{
-  /* Paper & ink */
-  --paper:#F7F0DA;
-  --paper-lo:#EFE7C7;
-  --paper-hi:#FCF7E7;
-  --paper-card:#FFFDF3;
+  --white:#FFFFFF;
+  --paper:#FAFAFA;
+  --fog:#F2F2F2;
+  --rule-lo:#E8E8E8;
+  --rule:#111111;
+  --black:#0A0A0A;
+  --ink:#111111;
+  --ink-2:#4A4A4A;
+  --ink-3:#8A8A8A;
+  --red:#E30613;          /* Swiss red / Vignelli red */
+  --red-dark:#B00410;
 
-  /* THU crest palette */
-  --navy:#0A2E5C;
-  --navy-lo:#1E4A82;
-  --gold:#B48628;
-  --gold-hi:#D4A94A;
-  --red:#A82A26;
+  /* Terminal palette — preserved from v1 */
+  --term-bg:#060F1E;
+  --term-bg-outer:#0B1C32;
+  --term-gold:#C9A227;
+  --term-green:#3EE577;
+  --term-teal:#4DD0E1;
+  --term-white:#F5F5F5;
+  --term-muted:#6B7280;
 
-  --ink:#17223B;
-  --ink-2:#4C5468;
-  --ink-3:#7A7659;
-  --hair:#D0C69F;
-  --hair-2:#E4DBB4;
-
-  --serif:'Noto Serif TC','PingFang TC','Songti TC',serif;
-  --sans:'Noto Sans TC','PingFang TC','Microsoft JhengHei',-apple-system,sans-serif;
-  --mono:'Roboto Mono','Menlo',ui-monospace,monospace;
+  --sans:'Inter','Helvetica Neue','Helvetica','Arial','Noto Sans TC','PingFang TC',sans-serif;
+  --tc:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;
+  --mono:'Space Mono','Menlo','Courier New',monospace;
 
   --touch:44px;
   --gutter:20px;
-  --radius:4px;
-  --radius-lg:8px;
+  --grid-max:1200px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{
-  background:var(--paper);
-  color:var(--ink);
-  font-family:var(--sans);
-  font-size:16px;
-  line-height:1.65;
-  min-height:100vh;
-  overflow-x:hidden;
-  padding-top:56px; /* topbar height */
+  background:var(--white);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.55;
+  min-height:100vh;overflow-x:hidden;padding-top:52px;
+  font-feature-settings:"ss01","cv11";
+  -webkit-font-smoothing:antialiased;
 }
 img,video{display:block;max-width:100%;height:auto}
-a{color:var(--navy-lo);text-decoration:none}
-a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+a{color:inherit;text-decoration:none}
+a:focus-visible{outline:2px solid var(--red);outline-offset:2px}
 button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
 
-/* ═════ noise/paper texture (subtle) ═════ */
-body::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;
-  background-image:
-    radial-gradient(circle at 20% 30%,rgba(180,134,40,.03) 0,transparent 40%),
-    radial-gradient(circle at 80% 70%,rgba(10,46,92,.03) 0,transparent 40%);
+/* Utility */
+.mono{font-family:var(--mono);letter-spacing:.02em}
+.tc{font-family:var(--tc)}
+.rule{height:1px;background:var(--black);border:0;margin:0}
+.rule-thin{height:1px;background:var(--rule-lo);border:0;margin:0}
+
+/* Micro label — Swiss all-caps meta */
+.eyebrow{
+  font-family:var(--mono);font-size:11px;font-weight:400;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink);display:flex;align-items:center;gap:12px;
 }
+.eyebrow-red{color:var(--red)}
+.eyebrow .dot{width:8px;height:8px;background:var(--red);flex-shrink:0}
+.eyebrow .rulet{flex:1;height:1px;background:var(--black);max-width:60px}
 
 /* ═════ TOP BAR ═════ */
 .topbar{
   position:fixed;top:0;left:0;right:0;z-index:100;
-  background:rgba(247,240,218,.92);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  border-bottom:1px solid var(--hair);
-  height:56px;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 var(--gutter);
+  background:var(--white);
+  border-bottom:1px solid var(--black);
+  height:52px;
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:0;
 }
-.brand{display:flex;align-items:center;gap:10px;color:var(--navy);font-family:var(--serif);font-weight:900;font-size:15px;letter-spacing:.02em}
-.crest{
-  width:32px;height:32px;border-radius:50%;
-  background:var(--navy);color:var(--paper);
-  display:grid;place-items:center;
-  font-family:var(--serif);font-weight:900;font-size:12px;
-  letter-spacing:-.5px;
-  box-shadow:0 0 0 1.5px var(--paper),0 0 0 3px var(--gold);
+.brand{
+  padding-left:var(--gutter);
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--sans);font-weight:900;font-size:14px;
+  letter-spacing:-.01em;color:var(--black);
 }
+.brand-mark{
+  width:22px;height:22px;background:var(--red);
+  display:grid;place-items:center;color:var(--white);
+  font-family:var(--sans);font-weight:900;font-size:11px;letter-spacing:0;
+}
+.brand-tc{font-family:var(--tc);font-weight:900;letter-spacing:.02em}
+.brand-en{
+  font-family:var(--mono);font-weight:400;font-size:10px;
+  letter-spacing:.14em;color:var(--ink-2);text-transform:uppercase;
+  margin-left:6px;padding-left:8px;border-left:1px solid var(--rule-lo);
+  display:none;
+}
+@media(min-width:520px){.brand-en{display:inline}}
+.tb-center{
+  font-family:var(--mono);font-size:10px;letter-spacing:.18em;
+  color:var(--ink-3);text-transform:uppercase;text-align:center;
+  display:none;
+}
+@media(min-width:768px){.tb-center{display:block}}
 .menu-btn{
-  min-width:var(--touch);min-height:var(--touch);
-  color:var(--navy);font-weight:700;font-size:13px;
-  letter-spacing:.15em;display:flex;align-items:center;gap:6px;padding:0 4px;
+  min-width:52px;min-height:52px;
+  border-left:1px solid var(--black);
+  display:grid;place-items:center;
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--black);
+  background:var(--white);transition:background .15s,color .15s;
 }
-.menu-btn .bars{display:inline-flex;flex-direction:column;gap:4px}
-.menu-btn .bars i{display:block;width:18px;height:1.5px;background:var(--navy);transition:transform .3s,opacity .3s}
+.menu-btn:hover{background:var(--black);color:var(--white)}
+.menu-btn .bars{display:inline-flex;flex-direction:column;gap:4px;margin-right:0}
+.menu-btn .bars i{display:block;width:16px;height:1.5px;background:currentColor;transition:transform .3s,opacity .3s}
+.menu-btn .lbl{display:none}
+@media(min-width:520px){
+  .menu-btn{padding:0 18px 0 14px;gap:10px;display:flex;align-items:center;justify-content:center}
+  .menu-btn .lbl{display:inline}
+}
+.menu-open .menu-btn{background:var(--red);color:var(--white);border-left-color:var(--red)}
 .menu-open .menu-btn .bars i:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
 .menu-open .menu-btn .bars i:nth-child(2){opacity:0}
 .menu-open .menu-btn .bars i:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}
 
-/* ═════ MENU DRAWER ═════ */
+/* Menu drawer */
 .menu{
-  position:fixed;top:56px;left:0;right:0;
-  background:var(--paper);
-  border-bottom:1px solid var(--hair);
-  transform:translateY(-110%);
-  transition:transform .4s cubic-bezier(.22,.61,.36,1);
-  z-index:99;padding:20px var(--gutter) 24px;
-  max-height:calc(100vh - 56px);overflow-y:auto;
-  box-shadow:0 20px 32px -20px rgba(10,46,92,.18);
+  position:fixed;top:52px;left:0;right:0;bottom:0;
+  background:var(--black);color:var(--white);
+  transform:translateY(-110%);transition:transform .4s cubic-bezier(.22,.61,.36,1);
+  z-index:99;padding:32px var(--gutter);
+  overflow-y:auto;
 }
 .menu-open .menu{transform:translateY(0)}
-.menu-grp{margin-bottom:16px}
-.menu-grp-lbl{
-  font-family:var(--mono);font-size:10px;font-weight:500;
-  letter-spacing:.22em;text-transform:uppercase;
-  color:var(--ink-3);padding-bottom:8px;
-  border-bottom:1px solid var(--hair-2);margin-bottom:8px;
+.menu-col{margin-bottom:30px}
+.menu-col-lbl{
+  font-family:var(--mono);font-size:10px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--red);
+  padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.15);
+  margin-bottom:8px;display:flex;align-items:baseline;gap:10px;
 }
+.menu-col-lbl::before{content:attr(data-n);font-family:var(--sans);font-weight:900;font-size:20px;letter-spacing:-.02em;color:var(--white)}
 .menu-a{
   display:flex;align-items:center;justify-content:space-between;
-  min-height:var(--touch);padding:6px 4px;
-  color:var(--navy);font-weight:500;font-size:15px;
-  border-bottom:1px solid var(--hair-2);
+  min-height:var(--touch);padding:8px 0;
+  color:var(--white);font-family:var(--tc);font-weight:500;font-size:16px;
+  letter-spacing:.02em;
+  border-bottom:1px solid rgba(255,255,255,.08);
 }
 .menu-a:last-child{border-bottom:none}
-.menu-a .ext{font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.05em}
+.menu-a .ext{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.06em}
+.menu-a:hover{color:var(--red)}
+.menu-a:hover .ext{color:var(--red)}
 
 /* ═════ HERO ═════ */
 .hero{
-  position:relative;
-  min-height:min(720px,100svh);
-  display:flex;flex-direction:column;justify-content:flex-end;
-  padding:32px var(--gutter) 40px;
+  position:relative;background:var(--white);
+  min-height:min(700px,100svh);
+  display:grid;grid-template-rows:1fr auto;
+  border-bottom:1px solid var(--black);
   overflow:hidden;
 }
-.hero-bg{
+.hero-photo{
   position:absolute;inset:0;
-  background:url(assets/luce-chapel.jpg) center 35%/cover no-repeat;
-  transform:scale(1.05);
-  animation:heroZoom 12s cubic-bezier(.15,.6,.35,1) forwards;
+  background:url(assets/luce-chapel.jpg) center 30%/cover no-repeat;
+  filter:grayscale(1) contrast(1.05);
+  animation:heroZoom 14s cubic-bezier(.15,.6,.35,1) forwards;
 }
-@keyframes heroZoom{to{transform:scale(1)}}
+@keyframes heroZoom{from{transform:scale(1.06)}to{transform:scale(1)}}
 .hero-veil{
   position:absolute;inset:0;
   background:
-    linear-gradient(180deg,rgba(247,240,218,.55) 0%,rgba(247,240,218,.28) 35%,rgba(247,240,218,.92) 78%,var(--paper) 100%),
-    linear-gradient(90deg,rgba(10,46,92,.28) 0%,rgba(10,46,92,.05) 60%);
+    linear-gradient(180deg,rgba(255,255,255,.72) 0%,rgba(255,255,255,.85) 55%,rgba(255,255,255,.98) 100%);
 }
-.hero-content{position:relative;z-index:2;color:var(--ink)}
-.hero-kicker{
-  font-family:var(--mono);font-size:11px;font-weight:500;
-  letter-spacing:.28em;text-transform:uppercase;
-  color:var(--navy);opacity:.75;
-  padding-bottom:14px;position:relative;
+.hero-content{
+  position:relative;z-index:2;
+  padding:64px var(--gutter) 24px;
+  display:flex;flex-direction:column;justify-content:flex-end;
 }
-.hero-kicker::before{
-  content:'';display:inline-block;width:28px;height:1px;background:var(--gold);
-  vertical-align:middle;margin-right:12px;transform:translateY(-2px);
+.hero-eyebrow{margin-bottom:32px}
+.hero-eyebrow .dot{background:var(--red)}
+.hero-h1{
+  font-family:var(--tc);font-weight:900;
+  font-size:clamp(48px,15vw,120px);
+  color:var(--black);line-height:.92;
+  letter-spacing:-.045em;
+  margin-bottom:0;
 }
-.hero-title{
-  font-family:var(--serif);font-weight:900;
-  font-size:clamp(2.3rem,10vw,3.4rem);
-  color:var(--navy);line-height:1.05;letter-spacing:-.02em;
-  margin:8px 0 14px;
+.hero-h1 .l1,.hero-h1 .l2{display:block}
+.hero-h1 .redbar{
+  display:inline-block;width:.6em;height:.14em;
+  background:var(--red);
+  vertical-align:.05em;margin-left:.05em;
 }
-.hero-title .en{
-  display:block;font-size:.28em;font-weight:700;letter-spacing:.14em;
-  color:var(--ink-2);margin-top:12px;text-transform:uppercase;font-family:var(--mono);
+.hero-en{
+  font-family:var(--sans);font-weight:800;
+  font-size:clamp(14px,3.6vw,20px);
+  letter-spacing:.01em;color:var(--ink);
+  padding-top:14px;line-height:1.15;
+  border-top:1px solid var(--black);margin-top:22px;
 }
-.hero-sub{
-  font-family:var(--serif);font-weight:700;
-  font-size:clamp(15px,4.2vw,18px);
-  color:var(--navy);letter-spacing:.02em;
-  padding:12px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
-  margin-bottom:16px;
+.hero-en .divide{color:var(--red);padding:0 8px;font-weight:900}
+.hero-meta-row{
+  display:grid;grid-template-columns:1fr;
+  gap:20px;padding-top:28px;margin-top:28px;
+  border-top:1px solid var(--rule-lo);
 }
-.hero-sub span{color:var(--gold);padding:0 4px;font-weight:900}
-.hero-lead{
-  color:var(--ink-2);font-size:14.5px;line-height:1.85;
-  max-width:520px;margin-bottom:26px;
+@media(min-width:600px){.hero-meta-row{grid-template-columns:1fr 1fr 1fr}}
+.hero-meta-item .hm-lbl{
+  font-family:var(--mono);font-size:10px;letter-spacing:.2em;
+  color:var(--ink-3);text-transform:uppercase;
+  padding-bottom:6px;border-bottom:1px solid var(--rule-lo);margin-bottom:8px;
 }
-.hero-cta{
+.hero-meta-item .hm-val{
+  font-family:var(--sans);font-weight:800;font-size:20px;
+  color:var(--black);letter-spacing:-.01em;line-height:1.15;
+}
+.hero-meta-item .hm-val .tc{font-family:var(--tc);font-weight:900;letter-spacing:.01em}
+.hero-meta-item .hm-note{
+  font-size:13px;color:var(--ink-2);margin-top:6px;line-height:1.5;
+}
+
+/* Hero action bar */
+.hero-action{
+  background:var(--black);color:var(--white);
+  padding:20px var(--gutter);
+  display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px;
+  position:relative;z-index:2;
+}
+.ha-lbl{
+  font-family:var(--mono);font-size:10px;letter-spacing:.22em;
+  color:var(--red);text-transform:uppercase;
+}
+.ha-txt{
+  font-family:var(--tc);font-weight:500;font-size:14px;line-height:1.4;
+  color:var(--white);margin-top:2px;
+}
+.ha-cta{
   display:inline-flex;align-items:center;gap:10px;
-  background:var(--navy);color:var(--paper-hi);
-  font-family:var(--serif);font-weight:700;font-size:16px;
-  padding:15px 26px;border-radius:var(--radius);
-  letter-spacing:.05em;min-height:var(--touch);
-  box-shadow:0 6px 16px -6px rgba(10,46,92,.5);
-  transition:transform .15s,box-shadow .15s;
+  background:var(--red);color:var(--white);
+  padding:14px 22px;font-family:var(--sans);font-weight:800;
+  font-size:14px;letter-spacing:.06em;text-transform:uppercase;
+  min-height:var(--touch);
+  transition:background .15s;
 }
-.hero-cta:hover,.hero-cta:active{transform:translateY(-1px);box-shadow:0 10px 20px -8px rgba(10,46,92,.6)}
-.hero-cta .arrow{
-  display:inline-block;transition:transform .2s;font-family:var(--mono);
-}
-.hero-cta:hover .arrow{transform:translateX(3px)}
-.hero-scroll{
-  display:block;margin-top:22px;
-  font-family:var(--mono);font-size:11px;letter-spacing:.24em;
-  color:var(--ink-2);text-transform:uppercase;
-}
-.hero-scroll::after{
-  content:'↓';display:block;font-size:16px;margin-top:6px;
-  animation:scrollBounce 2.4s ease-in-out infinite;
-}
-@keyframes scrollBounce{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(4px);opacity:1}}
+.ha-cta:hover{background:var(--red-dark)}
+.ha-cta .arr{font-family:var(--mono);font-weight:700;font-size:16px}
 
-/* ═════ ANNOUNCE BAND ═════ */
-.announce{
-  background:var(--navy);color:var(--paper-hi);
-  padding:14px var(--gutter);
-  border-top:2px solid var(--gold);
-}
-.announce-inner{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.announce-tag{
-  background:var(--gold);color:var(--navy);
-  font-family:var(--mono);font-size:10px;font-weight:500;
-  letter-spacing:.18em;text-transform:uppercase;
-  padding:4px 10px;border-radius:2px;flex-shrink:0;
-}
-.announce-body{flex:1;min-width:0;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.announce-title{font-size:14px;font-weight:500;color:var(--paper-hi)}
-.announce-link{
-  color:var(--gold-hi);font-family:var(--mono);font-size:12px;
-  font-weight:500;letter-spacing:.06em;white-space:nowrap;
-  border-bottom:1px solid var(--gold);padding-bottom:1px;
-}
+/* ═════ SECTION BASE ═════ */
+.sect{padding:64px var(--gutter);border-bottom:1px solid var(--black)}
+.sect-inner{max-width:var(--grid-max);margin:0 auto}
+.sect-black{background:var(--black);color:var(--white)}
+.sect-black .eyebrow{color:var(--white)}
+.sect-black .sect-h2{color:var(--white)}
+.sect-fog{background:var(--fog)}
 
-/* ═════ SECTION ═════ */
-.section{padding:56px var(--gutter);max-width:720px;margin:0 auto}
-.section--tinted{background:var(--paper-lo);max-width:none;padding-left:0;padding-right:0}
-.section--tinted > .section-inner{max-width:720px;margin:0 auto;padding:0 var(--gutter)}
-.section-hdr{margin-bottom:32px;position:relative}
-.kicker{
-  font-family:var(--mono);font-size:11px;font-weight:500;
-  letter-spacing:.24em;text-transform:uppercase;
-  color:var(--gold);padding-bottom:8px;
-  display:flex;align-items:center;gap:12px;
+.sect-hdr{
+  display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:end;
+  margin-bottom:44px;padding-bottom:20px;border-bottom:1px solid currentColor;
 }
-.kicker::before{content:'';flex:0 0 24px;height:1px;background:var(--gold)}
-.section-h2{
-  font-family:var(--serif);font-weight:900;
-  font-size:clamp(1.6rem,6vw,2rem);
-  color:var(--navy);line-height:1.2;
-  letter-spacing:-.01em;
+.sect-num{
+  font-family:var(--sans);font-weight:900;
+  font-size:clamp(52px,15vw,96px);
+  line-height:.85;letter-spacing:-.06em;
+  color:var(--red);
 }
-.section-lead{color:var(--ink-2);font-size:14.5px;margin-top:10px;line-height:1.75;max-width:520px}
+.sect-hdr-body{padding-bottom:6px}
+.sect-hdr-body .eyebrow{margin-bottom:14px}
+.sect-h2{
+  font-family:var(--tc);font-weight:900;
+  font-size:clamp(28px,7vw,52px);
+  line-height:1.02;letter-spacing:-.02em;
+  color:var(--black);
+}
+.sect-lead{
+  font-family:var(--tc);font-size:15px;line-height:1.75;
+  color:var(--ink-2);max-width:640px;margin-top:20px;
+}
+.sect-black .sect-lead{color:rgba(255,255,255,.72)}
+
+/* ═════ TERMINAL SECTION (preserved from v1, restyled envelope) ═════ */
+.terminal-sect{
+  background:var(--black);color:var(--white);
+  padding:64px var(--gutter);
+  border-bottom:1px solid var(--black);
+  position:relative;overflow:hidden;
+}
+.terminal-sect .sect-inner{max-width:var(--grid-max);margin:0 auto;position:relative;z-index:2}
+.terminal-sect .eyebrow{color:var(--red)}
+.terminal-sect .eyebrow .rulet{background:var(--red)}
+.terminal-heading{
+  font-family:var(--tc);font-weight:900;
+  font-size:clamp(38px,10vw,72px);
+  line-height:.95;letter-spacing:-.03em;
+  margin:24px 0 40px;
+}
+.th-white{color:var(--white);display:block}
+.th-gold{color:var(--term-gold);display:block;margin-top:8px}
+.terminal-container{
+  background:var(--term-bg);
+  border:1px solid rgba(201,162,39,.35);
+  overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 60px rgba(201,162,39,.08);
+  max-width:900px;margin:0 auto;
+}
+.terminal-titlebar{
+  background:rgba(201,162,39,.08);
+  border-bottom:1px solid rgba(201,162,39,.22);
+  padding:10px 14px;
+  display:flex;align-items:center;gap:6px;
+}
+.t-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.t-dot:nth-child(1){background:#ff5f57}
+.t-dot:nth-child(2){background:#febc2e}
+.t-dot:nth-child(3){background:#28c840}
+.t-title{
+  font-family:var(--mono);font-size:10px;color:var(--term-gold);
+  margin-left:10px;letter-spacing:.06em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.terminal-body{
+  padding:18px 20px;
+  font-family:var(--mono);font-size:13px;line-height:1.9;
+  position:relative;overflow:hidden;min-height:380px;
+}
+#matrix-rain{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  opacity:.08;pointer-events:none;z-index:0;
+}
+.terminal-lines{position:relative;z-index:1}
+.t-line{display:flex;align-items:flex-start;gap:6px;margin-bottom:2px}
+.t-line.cmd{color:var(--term-green)}
+.t-line.out{color:rgba(201,162,39,.78);padding-left:12px}
+.t-line.out-zh{color:rgba(201,162,39,.98);padding-left:12px;font-weight:700;font-family:var(--tc);letter-spacing:.02em}
+.t-line.success{color:var(--term-green);padding-left:12px}
+.t-line.warn{color:var(--term-gold);padding-left:12px}
+.t-line.dim{color:rgba(201,162,39,.4);padding-left:12px;font-size:12px}
+.t-prompt{color:var(--term-gold);flex-shrink:0}
+.t-cursor{display:inline;color:var(--term-teal);animation:blink .8s step-end infinite;margin-left:1px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.drone-row{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 0;margin:4px 0;
+  border-top:1px solid rgba(201,162,39,.14);
+  border-bottom:1px solid rgba(201,162,39,.14);
+  opacity:0;transition:opacity .3s;
+}
+.drone-icon-anim{font-size:16px;animation:droneFly 3s ease-in-out infinite}
+@keyframes droneFly{0%,100%{transform:translateX(0) translateY(0)}25%{transform:translateX(5px) translateY(-3px)}75%{transform:translateX(-5px) translateY(2px)}}
+.drone-bar{flex:1;height:3px;background:rgba(201,162,39,.12);overflow:hidden}
+.drone-bar-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--term-green),var(--term-teal),var(--term-green));
+  background-size:200%;
+  animation:shimmer 2s linear infinite;
+  width:72%;
+}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
 /* ═════ HONOR ROLL ═════ */
+.honor-grid{display:grid;grid-template-columns:1fr;gap:0}
 .honor-card{
-  background:var(--paper-card);
-  border:1px solid var(--hair);
-  border-radius:var(--radius-lg);
-  padding:28px 22px;
-  margin-bottom:28px;
-  position:relative;overflow:hidden;
-  box-shadow:0 1px 0 var(--paper-lo);
+  display:grid;grid-template-columns:1fr;
+  border:1px solid var(--black);
+  margin-bottom:32px;background:var(--white);
+  position:relative;
 }
-.honor-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,var(--gold) 0%,var(--gold-hi) 40%,var(--gold) 100%);
+.honor-card:last-child{margin-bottom:0}
+.honor-photo{
+  position:relative;aspect-ratio:16/10;overflow:hidden;
+  border-bottom:1px solid var(--black);
 }
-/* Signature: circular stamp badge */
-.honor-stamp{
-  position:absolute;top:24px;right:22px;
-  width:74px;height:74px;border-radius:50%;
-  border:2.5px solid var(--red);color:var(--red);
-  display:grid;place-items:center;
-  font-family:var(--serif);font-weight:900;font-size:22px;line-height:1;
-  letter-spacing:.05em;
-  transform:rotate(-8deg);
-  background:radial-gradient(circle,rgba(255,253,243,.9) 60%,transparent 62%);
-  animation:stampIn .8s cubic-bezier(.34,1.56,.64,1) .3s backwards;
+.honor-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.honor-photo-tag{
+  position:absolute;top:0;left:0;
+  background:var(--red);color:var(--white);
+  padding:8px 14px;
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.22em;text-transform:uppercase;
 }
-.honor-stamp::before{
-  content:'';position:absolute;inset:6px;border-radius:50%;
-  border:1px solid var(--red);opacity:.6;
+.honor-body{padding:28px 24px}
+.honor-num{
+  font-family:var(--sans);font-weight:900;font-size:64px;
+  line-height:.85;letter-spacing:-.04em;color:var(--red);
+  margin-bottom:8px;
 }
-.honor-stamp--gold{color:var(--gold);border-color:var(--gold);transform:rotate(6deg)}
-.honor-stamp--gold::before{border-color:var(--gold)}
-@keyframes stampIn{
-  0%{transform:scale(1.6) rotate(-24deg);opacity:0}
-  60%{transform:scale(.95) rotate(-6deg);opacity:1}
-  100%{transform:scale(1) rotate(-8deg);opacity:1}
-}
-.honor-stamp--gold{animation-name:stampInGold}
-@keyframes stampInGold{
-  0%{transform:scale(1.6) rotate(20deg);opacity:0}
-  60%{transform:scale(.95) rotate(8deg);opacity:1}
-  100%{transform:scale(1) rotate(6deg);opacity:1}
-}
-
 .honor-meta{
   font-family:var(--mono);font-size:11px;letter-spacing:.14em;
   color:var(--ink-3);text-transform:uppercase;
-  padding-right:90px;margin-bottom:10px;
+  padding-bottom:12px;margin-bottom:14px;
+  border-bottom:1px solid var(--rule-lo);
 }
 .honor-title{
-  font-family:var(--serif);font-weight:900;
-  font-size:clamp(1.25rem,4.6vw,1.55rem);
-  color:var(--navy);line-height:1.35;
-  padding-right:90px;margin-bottom:20px;letter-spacing:-.005em;
+  font-family:var(--tc);font-weight:900;
+  font-size:clamp(22px,5vw,32px);
+  line-height:1.2;letter-spacing:-.01em;
+  color:var(--black);margin-bottom:20px;
 }
-.honor-hero-img{
-  width:calc(100% + 44px);margin:0 -22px 20px;
-  border-top:1px solid var(--hair);
-  border-bottom:1px solid var(--hair);
-  aspect-ratio:16/9;object-fit:cover;
-  background:var(--paper-lo);
-}
-.honor-body{
-  color:var(--ink);font-size:14.5px;line-height:1.9;
-  margin-bottom:20px;text-align:justify;
+.honor-txt{
+  font-family:var(--tc);font-size:14.5px;line-height:1.9;
+  color:var(--ink);margin-bottom:16px;text-align:justify;
   text-justify:inter-ideograph;
 }
 .honor-subhead{
-  font-family:var(--serif);font-weight:700;font-size:16px;
-  color:var(--navy);
-  padding:14px 0 10px;border-top:1px dashed var(--hair);
-  margin-top:8px;letter-spacing:.02em;
+  font-family:var(--sans);font-weight:800;font-size:11px;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--red);
+  padding:20px 0 10px;margin-top:12px;
+  border-top:1px solid var(--black);
 }
-.honor-subhead::before{
-  content:'▸';color:var(--gold);margin-right:8px;font-size:.85em;
-}
-.honor-product-img{
-  width:100%;border-radius:var(--radius);
+.honor-subhead .tc{font-family:var(--tc);letter-spacing:.05em;font-weight:900;margin-left:8px}
+.honor-embed-img{
+  width:100%;border:1px solid var(--rule-lo);
+  aspect-ratio:16/9;object-fit:cover;
   margin-bottom:16px;
-  border:1px solid var(--hair);
 }
-
-/* Video */
 .video-wrap{
-  position:relative;
-  background:#0A0A0A;border-radius:var(--radius);overflow:hidden;
-  margin-bottom:8px;
+  position:relative;background:#000;
+  border:1px solid var(--black);margin-bottom:8px;
 }
-.video-wrap video{width:100%;display:block;background:#0A0A0A;aspect-ratio:16/9;object-fit:cover}
+.video-wrap video{width:100%;display:block;background:#000;aspect-ratio:16/9;object-fit:cover}
 .video-mute{
-  position:absolute;bottom:12px;right:12px;
-  background:rgba(0,0,0,.65);color:#fff;
-  padding:8px 12px;border-radius:20px;
-  font-size:12px;font-weight:500;letter-spacing:.04em;
-  display:flex;align-items:center;gap:6px;
-  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
-  min-height:36px;
+  position:absolute;bottom:10px;right:10px;
+  background:var(--white);color:var(--black);
+  padding:8px 12px;
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.06em;
+  display:flex;align-items:center;gap:6px;min-height:36px;
+  border:1px solid var(--black);
 }
-.video-caption{
-  font-family:var(--mono);font-size:11px;letter-spacing:.12em;
+.video-cap{
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;
   color:var(--ink-3);text-transform:uppercase;
-  text-align:center;padding:6px 0 18px;
+  padding:6px 0 20px;text-align:center;
 }
-
 .honor-more{
-  display:inline-flex;align-items:center;gap:8px;
-  color:var(--navy);font-weight:500;font-size:14px;
-  border-bottom:1px solid var(--navy);padding-bottom:2px;
+  display:inline-flex;align-items:center;gap:10px;
+  padding:12px 18px;background:var(--black);color:var(--white);
+  font-family:var(--sans);font-weight:800;font-size:12px;
+  letter-spacing:.14em;text-transform:uppercase;
+  min-height:var(--touch);
+  transition:background .15s;
+}
+.honor-more:hover{background:var(--red)}
+
+@media(min-width:820px){
+  .honor-card{grid-template-columns:1fr 1fr}
+  .honor-card--reverse{grid-template-columns:1fr 1fr}
+  .honor-card--reverse .honor-photo{order:2}
+  .honor-photo{aspect-ratio:auto;height:100%;border-bottom:none;border-right:1px solid var(--black)}
+  .honor-card--reverse .honor-photo{border-right:none;border-left:1px solid var(--black)}
+  .honor-body{padding:40px 36px}
 }
 
-/* ═════ TIMELINE (news) ═════ */
-.timeline{list-style:none;position:relative;padding-left:0}
-.timeline::before{
-  content:'';position:absolute;top:8px;bottom:8px;left:52px;
-  width:1px;background:var(--hair);
-}
+/* ═════ NEWS TIMELINE ═════ */
+.tl{list-style:none}
 .tl-item{
-  display:grid;grid-template-columns:64px 1fr;gap:0;
-  padding:16px 0;position:relative;
-  border-bottom:1px solid var(--hair-2);
+  display:grid;grid-template-columns:64px 1fr auto;gap:16px;
+  padding:18px 0;border-bottom:1px solid var(--rule-lo);
+  align-items:baseline;
 }
-.tl-item:last-child{border-bottom:none}
-.tl-item::after{
-  content:'';position:absolute;left:48px;top:22px;
-  width:9px;height:9px;border-radius:50%;
-  background:var(--paper);border:2px solid var(--gold);
-  z-index:1;
+.tl-item:first-child{border-top:1px solid var(--black);padding-top:22px}
+.tl-item:last-child{border-bottom:1px solid var(--black)}
+.tl-item:hover{background:var(--fog);cursor:pointer}
+.tl-num{
+  font-family:var(--sans);font-weight:900;font-size:22px;
+  color:var(--black);letter-spacing:-.02em;line-height:1;
 }
+.tl-body{min-width:0}
 .tl-date{
-  padding-right:24px;text-align:right;
-  font-family:var(--mono);
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;
+  color:var(--red);text-transform:uppercase;margin-bottom:6px;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
 }
-.tl-y{display:block;font-size:11px;color:var(--ink-3);letter-spacing:.1em}
-.tl-md{display:block;font-size:15px;color:var(--navy);font-weight:500;letter-spacing:.02em}
-.tl-body{padding-left:16px;min-width:0}
-.tl-tag{
-  display:inline-block;font-family:var(--mono);
-  font-size:10px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--gold);background:rgba(180,134,40,.08);
-  padding:2px 8px;border-radius:2px;margin-bottom:6px;
+.tl-cat{
+  color:var(--black);border:1px solid var(--black);
+  padding:2px 6px;font-weight:700;
 }
 .tl-title{
-  display:block;color:var(--navy);font-weight:500;font-size:15px;
-  line-height:1.55;letter-spacing:-.005em;
+  font-family:var(--tc);font-weight:700;font-size:15.5px;line-height:1.5;
+  color:var(--black);letter-spacing:-.005em;display:block;
 }
-.tl-title:hover{color:var(--gold);text-decoration:underline;text-decoration-color:var(--gold-hi)}
-
-.see-more{
-  display:inline-flex;align-items:center;gap:8px;margin-top:20px;
-  font-family:var(--mono);font-size:12px;letter-spacing:.14em;
-  color:var(--navy);text-transform:uppercase;
-  border-bottom:1px solid var(--gold);padding-bottom:3px;
+.tl-title:hover{color:var(--red)}
+.tl-ext{
+  font-family:var(--mono);font-size:11px;color:var(--ink-3);
+  letter-spacing:.06em;flex-shrink:0;padding-left:8px;
+}
+.see-all{
+  display:inline-flex;align-items:center;gap:10px;margin-top:28px;
+  font-family:var(--sans);font-weight:800;font-size:12px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--black);
+  padding-bottom:4px;border-bottom:2px solid var(--red);
 }
 
-/* ═════ CORE FIELDS ═════ */
-.fields-grid{display:flex;flex-direction:column;gap:16px}
-.field-card{
-  background:var(--paper-card);
-  border-left:3px solid var(--navy);
-  padding:22px 22px 24px;
-  border-radius:0 var(--radius) var(--radius) 0;
+/* ═════ FIELDS (three pillars) ═════ */
+.fields-grid{display:grid;grid-template-columns:1fr;gap:0;border-top:1px solid var(--black)}
+@media(min-width:720px){.fields-grid{grid-template-columns:repeat(3,1fr)}}
+.field{
+  padding:32px 24px;background:var(--white);
+  border-bottom:1px solid var(--black);
   position:relative;
-  transition:border-color .2s,transform .2s;
 }
-.field-card:hover{border-left-color:var(--gold)}
-.field-no{
-  position:absolute;top:18px;right:22px;
-  font-family:var(--mono);font-size:11px;font-weight:500;
-  letter-spacing:.14em;color:var(--gold);
+@media(min-width:720px){
+  .field{border-bottom:1px solid var(--black);border-right:1px solid var(--black)}
+  .field:last-child{border-right:none}
+}
+.field-num{
+  font-family:var(--sans);font-weight:900;font-size:72px;
+  line-height:.85;letter-spacing:-.06em;color:var(--red);
+  margin-bottom:20px;
 }
 .field-title{
-  font-family:var(--serif);font-weight:900;font-size:1.15rem;
-  color:var(--navy);margin-bottom:8px;letter-spacing:.01em;
+  font-family:var(--tc);font-weight:900;font-size:22px;
+  line-height:1.2;letter-spacing:-.005em;color:var(--black);
+  padding-bottom:14px;margin-bottom:14px;
+  border-bottom:1px solid var(--black);
 }
-.field-card p{color:var(--ink-2);font-size:14px;line-height:1.85}
+.field-en{
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  color:var(--red);text-transform:uppercase;
+  padding-bottom:12px;margin-bottom:12px;
+}
+.field p{color:var(--ink);font-size:14px;line-height:1.85}
 
-/* ═════ INTERACTIVE DEMOS ═════ */
-.demo-grid{display:flex;flex-direction:column;gap:18px}
-.demo-card{
-  display:block;background:var(--navy);color:var(--paper-hi);
-  padding:26px 22px;border-radius:var(--radius-lg);
+/* ═════ PHOTO ESSAY (40th anniversary Müller-Brockmann style grid) ═════ */
+.essay-hdr{
+  display:grid;grid-template-columns:1fr auto;gap:20px;
+  align-items:end;padding-bottom:24px;
+  border-bottom:1px solid var(--black);margin-bottom:32px;
+}
+.essay-hdr-l .eyebrow{margin-bottom:14px}
+.essay-hdr-l h2{
+  font-family:var(--tc);font-weight:900;
+  font-size:clamp(28px,7vw,52px);
+  line-height:1.02;letter-spacing:-.02em;
+}
+.essay-hdr-l h2 em{font-style:normal;color:var(--red);font-family:var(--sans);letter-spacing:-.04em}
+.essay-hdr-r{
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  color:var(--ink-3);text-transform:uppercase;text-align:right;
+  padding-bottom:8px;
+}
+.essay-hdr-r .big{
+  display:block;font-family:var(--sans);font-weight:900;font-size:32px;
+  color:var(--black);letter-spacing:-.04em;line-height:.9;margin-bottom:4px;
+}
+
+.photo-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:6px;
+}
+.photo{position:relative;overflow:hidden;background:var(--fog);border:1px solid var(--black)}
+.photo img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .4s cubic-bezier(.22,.61,.36,1),filter .3s;
+}
+.photo:hover img{transform:scale(1.03);filter:brightness(1.05)}
+.photo::after{
+  content:attr(data-cap);
+  position:absolute;bottom:0;left:0;right:0;
+  padding:6px 8px;
+  background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.75) 100%);
+  color:var(--white);font-family:var(--mono);font-size:9px;
+  letter-spacing:.14em;text-transform:uppercase;
+  opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s;
+  pointer-events:none;
+}
+.photo:hover::after,.photo:focus-within::after{opacity:1;transform:translateY(0)}
+
+/* Grid pattern: 10 photos in a rhythmic Müller-Brockmann layout */
+.photo-grid .photo{aspect-ratio:1/1}
+/* On mobile 2 cols */
+@media(max-width:519px){.photo-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:520px) and (max-width:819px){.photo-grid{grid-template-columns:repeat(3,1fr)}}
+/* Rhythmic spans on wide */
+@media(min-width:820px){
+  .photo-grid{grid-template-columns:repeat(4,1fr);grid-auto-flow:dense}
+  .photo:nth-child(1){grid-column:span 2;grid-row:span 2}
+  .photo:nth-child(4){grid-column:span 2}
+  .photo:nth-child(7){grid-column:span 2}
+  .photo:nth-child(9){grid-row:span 2}
+  .photo:nth-child(1) img,.photo:nth-child(4) img,.photo:nth-child(7) img{aspect-ratio:auto}
+  .photo:nth-child(1){aspect-ratio:1/1}
+  .photo:nth-child(4),.photo:nth-child(7){aspect-ratio:2/1}
+  .photo:nth-child(9){aspect-ratio:1/2}
+}
+
+.essay-legend{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;
+  margin-top:24px;padding-top:20px;border-top:1px solid var(--black);
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink-2);
+}
+.essay-legend div span{color:var(--red);font-weight:700;margin-right:8px}
+@media(min-width:720px){.essay-legend{grid-template-columns:repeat(3,1fr)}}
+
+/* ═════ INTERACTIVE DEMOS (Vignelli blocks) ═════ */
+.demos-grid{display:grid;grid-template-columns:1fr;gap:0;border-top:1px solid var(--black)}
+@media(min-width:720px){.demos-grid{grid-template-columns:1fr 1fr}}
+.demo{
+  display:block;padding:36px 26px;
+  border-bottom:1px solid var(--black);
   position:relative;overflow:hidden;
-  transition:transform .2s;
+  transition:background .2s;
 }
-.demo-card::before{
-  content:'';position:absolute;top:0;right:0;bottom:0;
-  width:6px;background:var(--gold);
+@media(min-width:720px){
+  .demo{border-right:1px solid var(--black)}
+  .demo:last-child{border-right:none}
 }
-.demo-card--alt{background:#1B1F2E}
-.demo-card--alt::before{background:var(--gold-hi)}
-.demo-card:active{transform:scale(.99)}
+.demo-a{background:var(--red);color:var(--white)}
+.demo-b{background:var(--black);color:var(--white)}
+.demo:hover{transform:none}
+.demo-a:hover{background:var(--red-dark)}
 .demo-tag{
-  display:inline-block;font-family:var(--mono);font-size:10px;
-  letter-spacing:.2em;text-transform:uppercase;color:var(--gold-hi);
-  margin-bottom:12px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--white);opacity:.75;margin-bottom:20px;
+  display:flex;align-items:center;gap:10px;
+}
+.demo-tag::before{content:'';width:14px;height:1px;background:currentColor}
+.demo-num{
+  font-family:var(--sans);font-weight:900;font-size:64px;line-height:.85;
+  letter-spacing:-.05em;color:var(--white);margin-bottom:12px;opacity:.9;
 }
 .demo-title{
-  font-family:var(--serif);font-weight:900;font-size:1.3rem;
-  color:var(--paper-hi);margin-bottom:10px;line-height:1.3;
-  letter-spacing:.01em;
+  font-family:var(--tc);font-weight:900;font-size:26px;line-height:1.2;
+  letter-spacing:-.01em;margin-bottom:12px;
 }
-.demo-desc{color:rgba(252,247,231,.75);font-size:14px;line-height:1.75;margin-bottom:16px}
+.demo-desc{
+  font-family:var(--tc);font-size:14px;line-height:1.75;
+  color:rgba(255,255,255,.85);margin-bottom:24px;
+}
 .demo-more{
-  font-family:var(--mono);font-size:12px;font-weight:500;
-  letter-spacing:.14em;color:var(--gold-hi);
-  text-transform:uppercase;
-  border-bottom:1px solid var(--gold);padding-bottom:2px;
-  display:inline-block;
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--sans);font-weight:800;font-size:12px;
+  letter-spacing:.14em;text-transform:uppercase;
+  border-bottom:2px solid var(--white);padding-bottom:4px;
 }
 
 /* ═════ QUICK NAV ═════ */
 .nav-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  display:grid;grid-template-columns:repeat(2,1fr);gap:0;
+  border:1px solid var(--black);
 }
+@media(min-width:720px){.nav-grid{grid-template-columns:repeat(3,1fr)}}
 .nav-link{
-  background:var(--paper-card);
-  border:1px solid var(--hair);border-radius:var(--radius);
-  padding:18px 16px;
-  display:flex;flex-direction:column;gap:2px;
-  min-height:78px;justify-content:center;
-  transition:border-color .2s,background .2s;
+  padding:24px 18px;
+  border-right:1px solid var(--black);border-bottom:1px solid var(--black);
+  display:flex;flex-direction:column;gap:6px;
+  background:var(--white);transition:background .15s,color .15s;
+  min-height:96px;justify-content:center;
 }
-.nav-link:hover{border-color:var(--navy);background:#FFFDF3}
+.nav-link:hover{background:var(--black);color:var(--white)}
+.nav-link:hover .nav-tc{color:var(--white)}
+.nav-link:hover .nav-en{color:var(--red)}
+.nav-link:hover .nav-arr{color:var(--red)}
+/* Remove borders on last col/row */
+@media(min-width:720px){
+  .nav-link:nth-child(3n){border-right:none}
+  .nav-link:nth-last-child(-n+3){border-bottom:none}
+}
+@media(max-width:719px){
+  .nav-link:nth-child(2n){border-right:none}
+  .nav-link:nth-last-child(-n+2){border-bottom:none}
+}
 .nav-en{
-  font-family:var(--mono);font-size:10px;font-weight:500;
-  letter-spacing:.18em;color:var(--ink-3);text-transform:uppercase;
+  font-family:var(--mono);font-size:10px;letter-spacing:.18em;
+  color:var(--red);text-transform:uppercase;font-weight:700;
 }
 .nav-tc{
-  font-family:var(--serif);font-weight:700;font-size:16px;
-  color:var(--navy);letter-spacing:.02em;
+  font-family:var(--tc);font-weight:900;font-size:17px;
+  color:var(--black);letter-spacing:.01em;
+}
+.nav-arr{
+  font-family:var(--mono);font-size:12px;color:var(--ink-3);
+  align-self:flex-end;margin-top:auto;
 }
 
 /* ═════ SOCIAL ═════ */
-.social-grid{display:flex;flex-direction:column;gap:10px}
+.social-list{display:grid;grid-template-columns:1fr;gap:0;border:1px solid var(--black)}
 .social-link{
-  display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;
-  padding:14px 16px;background:var(--paper-card);
-  border:1px solid var(--hair);border-radius:var(--radius);
-  transition:border-color .2s;
+  display:grid;grid-template-columns:52px 1fr auto;gap:0;align-items:stretch;
+  border-bottom:1px solid var(--black);
+  background:var(--white);transition:background .15s;
 }
-.social-link:hover{border-color:var(--gold)}
-.social-icon{
-  width:44px;height:44px;border-radius:50%;
-  background:var(--navy);color:var(--paper-hi);
+.social-link:last-child{border-bottom:none}
+.social-link:hover{background:var(--fog)}
+.social-ic{
+  background:var(--black);color:var(--white);
   display:grid;place-items:center;
-  font-family:var(--mono);font-weight:500;font-size:12px;letter-spacing:.05em;
+  font-family:var(--sans);font-weight:900;font-size:13px;letter-spacing:.05em;
 }
+.social-link:hover .social-ic{background:var(--red)}
+.social-body{padding:14px 18px}
 .social-name{
-  font-weight:500;font-size:14.5px;color:var(--navy);letter-spacing:.01em;
+  font-family:var(--tc);font-weight:700;font-size:14.5px;
+  color:var(--black);letter-spacing:.005em;line-height:1.35;
 }
 .social-handle{
-  font-family:var(--mono);font-size:11px;
-  color:var(--ink-3);letter-spacing:.06em;
+  font-family:var(--mono);font-size:11px;color:var(--ink-3);
+  letter-spacing:.05em;margin-top:2px;
+}
+.social-arr{
+  padding:0 20px;display:grid;place-items:center;
+  font-family:var(--mono);font-size:14px;color:var(--ink-2);
 }
 
 /* ═════ FOOTER ═════ */
-.site-footer{
-  background:var(--navy);color:var(--paper-hi);
-  padding:44px var(--gutter) 34px;
-  border-top:4px solid var(--gold);
+.foot{background:var(--black);color:var(--white);padding:56px var(--gutter) 32px}
+.foot-inner{max-width:var(--grid-max);margin:0 auto}
+.foot-mark-row{
+  display:grid;grid-template-columns:1fr;gap:24px;
+  padding-bottom:28px;border-bottom:1px solid rgba(255,255,255,.15);
+  margin-bottom:32px;
 }
-.footer-brand{
-  padding-bottom:22px;margin-bottom:22px;
-  border-bottom:1px solid rgba(252,247,231,.15);
+@media(min-width:720px){.foot-mark-row{grid-template-columns:auto 1fr;align-items:end}}
+.foot-mark{
+  display:flex;align-items:center;gap:14px;
 }
-.footer-name{
-  font-family:var(--serif);font-weight:900;font-size:1.35rem;
-  color:var(--paper-hi);letter-spacing:.01em;
+.foot-mark-crest{
+  width:56px;height:56px;background:var(--red);
+  display:grid;place-items:center;color:var(--white);
+  font-family:var(--sans);font-weight:900;font-size:20px;
 }
-.footer-en{
-  font-family:var(--mono);font-size:12px;letter-spacing:.08em;
-  color:rgba(252,247,231,.65);margin-top:4px;
+.foot-name{font-family:var(--tc);font-weight:900;font-size:22px;letter-spacing:.01em}
+.foot-en{
+  font-family:var(--sans);font-weight:800;font-size:13px;
+  letter-spacing:.02em;color:rgba(255,255,255,.65);margin-top:4px;
 }
-.footer-est{
-  font-family:var(--mono);font-size:11px;letter-spacing:.18em;
-  color:var(--gold-hi);margin-top:8px;text-transform:uppercase;
+.foot-est{
+  font-family:var(--mono);font-size:11px;letter-spacing:.22em;
+  color:var(--red);text-transform:uppercase;
 }
-.contact{margin-bottom:22px}
-.contact-line{
-  display:flex;gap:12px;padding:6px 0;font-size:14px;
-  line-height:1.7;color:rgba(252,247,231,.85);
-  border-bottom:1px dashed rgba(252,247,231,.12);
+.contact{
+  display:grid;grid-template-columns:1fr;gap:0;
+  margin-bottom:32px;
 }
-.contact-line:last-child{border-bottom:none}
+@media(min-width:720px){.contact{grid-template-columns:1fr 1fr}}
+.contact-item{
+  padding:14px 0;border-bottom:1px solid rgba(255,255,255,.1);
+  display:grid;grid-template-columns:60px 1fr;gap:16px;align-items:baseline;
+}
 .contact-lbl{
-  font-family:var(--mono);font-size:11px;letter-spacing:.16em;
-  color:var(--gold-hi);text-transform:uppercase;flex:0 0 44px;padding-top:2px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.18em;
+  color:var(--red);text-transform:uppercase;
 }
-.contact-line a{color:var(--paper-hi);border-bottom:1px dotted rgba(252,247,231,.4)}
-.footer-notice{
-  background:rgba(252,247,231,.06);border-left:2px solid var(--gold);
-  padding:12px 14px;font-size:12.5px;line-height:1.75;
-  color:rgba(252,247,231,.75);margin-bottom:22px;
-  border-radius:0 var(--radius) var(--radius) 0;
+.contact-val{color:rgba(255,255,255,.9);font-size:14px;line-height:1.6}
+.contact-val a{color:var(--white);border-bottom:1px dotted rgba(255,255,255,.4)}
+.foot-notice{
+  background:rgba(255,255,255,.06);border-left:3px solid var(--red);
+  padding:14px 16px;font-size:13px;line-height:1.75;
+  color:rgba(255,255,255,.75);margin-bottom:24px;
 }
-.footer-notice a{color:var(--gold-hi);font-weight:500}
-.footer-copy{
-  font-family:var(--mono);font-size:11px;letter-spacing:.14em;
-  color:rgba(252,247,231,.5);text-align:center;
-  padding-top:14px;border-top:1px solid rgba(252,247,231,.1);
+.foot-notice a{color:var(--red);font-weight:700}
+.foot-bot{
+  display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  padding-top:16px;border-top:1px solid rgba(255,255,255,.1);
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;
+  color:rgba(255,255,255,.55);text-transform:uppercase;
 }
 
 /* ═════ REVEAL ═════ */
-.reveal{opacity:0;transform:translateY(18px);transition:opacity .8s cubic-bezier(.22,.61,.36,1),transform .8s cubic-bezier(.22,.61,.36,1)}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.22,.61,.36,1),transform .8s cubic-bezier(.22,.61,.36,1)}
 .reveal.in{opacity:1;transform:translateY(0)}
 
-/* ═════ RESPONSIVE ═════ */
-@media(min-width:600px){
-  .section{padding:72px 32px}
-  .fields-grid{display:grid;grid-template-columns:repeat(3,1fr)}
-  .demo-grid{display:grid;grid-template-columns:1fr 1fr}
-  .nav-grid{grid-template-columns:repeat(3,1fr)}
-}
-@media(min-width:900px){
-  body{padding-top:64px}
-  .topbar{height:64px;padding:0 40px}
-  .menu{top:64px;padding:32px 40px}
-  .brand{font-size:17px}
-  .crest{width:36px;height:36px;font-size:13px}
-  .hero{padding:60px 40px 80px;min-height:min(760px,90vh)}
-  .section{padding:88px 40px;max-width:960px}
-  .honor-card{padding:36px 32px}
-  .honor-hero-img{width:calc(100% + 64px);margin:0 -32px 24px}
-  .site-footer{padding:56px 40px}
-}
+/* Motion safety */
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
-  .hero-bg{transform:none}
+  .hero-photo{transform:none}
+}
+
+/* Desktop scale-up */
+@media(min-width:900px){
+  body{padding-top:60px}
+  .topbar{height:60px}
+  .menu{top:60px}
+  .hero-content{padding:100px 40px 40px}
+  .hero-action{padding:28px 40px}
+  .sect{padding:96px 40px}
+  .terminal-sect{padding:96px 40px}
+  .foot{padding:80px 40px 40px}
 }
 </style>
 </head>
@@ -580,26 +789,31 @@ body::before{
 <!-- ═════ TOP BAR ═════ -->
 <header class="topbar">
   <a href="#top" class="brand" aria-label="回到頂部">
-    <span class="crest" aria-hidden="true">Th</span>
-    <span>東海食科系</span>
+    <span class="brand-mark" aria-hidden="true">Th</span>
+    <span class="brand-tc">東海食科系</span>
+    <span class="brand-en">Dept. of Food Science</span>
   </a>
+  <div class="tb-center">MOBILE · GATEWAY · V3</div>
   <button class="menu-btn" onclick="toggleMenu()" aria-label="開啟選單" aria-expanded="false">
     <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="lbl">Menu</span>
   </button>
 </header>
 
 <nav class="menu" id="menu" aria-label="快速導覽">
-  <div class="menu-grp">
-    <div class="menu-grp-lbl">本頁區塊</div>
+  <div class="menu-col">
+    <div class="menu-col-lbl" data-n="01">本頁區塊</div>
     <a class="menu-a" href="#honor" onclick="toggleMenu()">系所榮譽榜<span class="ext">↓</span></a>
+    <a class="menu-a" href="#terminal" onclick="toggleMenu()">食品 AI 實驗室 · 即時終端<span class="ext">↓</span></a>
     <a class="menu-a" href="#news" onclick="toggleMenu()">最新消息<span class="ext">↓</span></a>
-    <a class="menu-a" href="#fields" onclick="toggleMenu()">核心領域<span class="ext">↓</span></a>
+    <a class="menu-a" href="#fields" onclick="toggleMenu()">三大核心領域<span class="ext">↓</span></a>
+    <a class="menu-a" href="#essay" onclick="toggleMenu()">四十週年 · 影像紀事<span class="ext">↓</span></a>
     <a class="menu-a" href="#demos" onclick="toggleMenu()">互動教學示範<span class="ext">↓</span></a>
     <a class="menu-a" href="#nav" onclick="toggleMenu()">官網快速導覽<span class="ext">↓</span></a>
     <a class="menu-a" href="#social" onclick="toggleMenu()">官方社群<span class="ext">↓</span></a>
   </div>
-  <div class="menu-grp">
-    <div class="menu-grp-lbl">前往官方網站</div>
+  <div class="menu-col">
+    <div class="menu-col-lbl" data-n="02">前往官方網站</div>
     <a class="menu-a" href="https://foodsci.thu.edu.tw" target="_blank" rel="noopener noreferrer">系所首頁<span class="ext">↗</span></a>
     <a class="menu-a" href="https://foodsci.thu.edu.tw/web/admissions/list.php" target="_blank" rel="noopener noreferrer">招生資訊<span class="ext">↗</span></a>
     <a class="menu-a" href="https://foodsci.thu.edu.tw/web/teacher/list.php" target="_blank" rel="noopener noreferrer">師資成員<span class="ext">↗</span></a>
@@ -610,296 +824,475 @@ body::before{
 
 <!-- ═════ HERO ═════ -->
 <section class="hero" id="top" aria-label="首頁">
-  <div class="hero-bg" role="presentation"></div>
+  <div class="hero-photo" role="presentation"></div>
   <div class="hero-veil" aria-hidden="true"></div>
+
   <div class="hero-content">
-    <div class="hero-kicker">Tunghai University · Est. 1980</div>
-    <h1 class="hero-title">
-      東海大學<br>食品科學系
-      <span class="en">Department of Food Science</span>
+    <div class="eyebrow hero-eyebrow">
+      <span class="dot"></span>
+      <span>TUNGHAI UNIVERSITY · EST. 1980</span>
+      <span class="rulet"></span>
+    </div>
+    <h1 class="hero-h1">
+      <span class="l1">食品科學系<span class="redbar"></span></span>
     </h1>
-    <div class="hero-sub">食品科技<span>／</span>食品安全與 AI 智慧科技<span>／</span>食品產業管理</div>
-    <p class="hero-lead">創系逾四十年，涵蓋食品科技、食品安全與智慧科技、食品產業管理三大領域。課程結合理論與實務，大三進實驗室做專題研究，並透過暑期實習與企業橋接實習強化產學銜接，另導入 AI 與大數據課程，培育兼具科學專業與跨域整合能力的食品人才。</p>
-    <a class="hero-cta" href="https://foodsci.thu.edu.tw" target="_blank" rel="noopener noreferrer">
-      進入官方網站
-      <span class="arrow" aria-hidden="true">→</span>
+    <div class="hero-en">Department<span class="divide">/</span>of<span class="divide">/</span>Food Science</div>
+
+    <div class="hero-meta-row">
+      <div class="hero-meta-item">
+        <div class="hm-lbl">Founded</div>
+        <div class="hm-val">1980<span style="color:var(--red)">.</span></div>
+        <div class="hm-note">創系逾四十年</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hm-lbl">Focus</div>
+        <div class="hm-val"><span class="tc">科技／安全／管理</span></div>
+        <div class="hm-note">三大專業領域整合</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hm-lbl">Awards 2025-26</div>
+        <div class="hm-val">02<span style="color:var(--red)">.</span> <span style="font-size:14px;color:var(--ink-2);font-weight:500;font-family:var(--mono);letter-spacing:.05em">GOLD × 1 / CHAMPION × 1</span></div>
+        <div class="hm-note">全國性競賽近期獎項</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-action">
+    <div>
+      <div class="ha-lbl">Official Website</div>
+      <div class="ha-txt">foodsci.thu.edu.tw · 於新分頁開啟</div>
+    </div>
+    <a class="ha-cta" href="https://foodsci.thu.edu.tw" target="_blank" rel="noopener noreferrer">
+      進入官網
+      <span class="arr" aria-hidden="true">→</span>
     </a>
-    <a class="hero-scroll" href="#announce" aria-label="繼續瀏覽">認識我們</a>
   </div>
 </section>
 
-<!-- ═════ ANNOUNCE BAND ═════ -->
-<section class="announce" id="announce" aria-label="重要公告">
-  <div class="announce-inner">
-    <span class="announce-tag">招生公告</span>
-    <div class="announce-body">
-      <div class="announce-title">115 學年度申請入學 · 書審與面試指引及相關資訊（已更新）</div>
-      <a class="announce-link" href="https://foodsci.thu.edu.tw/web/news/detail.php?cid=4&id=114" target="_blank" rel="noopener noreferrer">查看指引 →</a>
+<!-- ═════ TERMINAL SECTION (from v1, preserved) ═════ -->
+<section class="terminal-sect" id="terminal">
+  <div class="sect-inner">
+    <div class="eyebrow reveal">
+      <span class="dot"></span>
+      <span>LIVE RESEARCH TERMINAL / 即時研究終端</span>
+      <span class="rulet"></span>
+    </div>
+    <h2 class="terminal-heading reveal">
+      <span class="th-white">食品 AI 實驗室</span>
+      <span class="th-gold">正在運行</span>
+    </h2>
+    <div class="terminal-container reveal">
+      <div class="terminal-titlebar">
+        <div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div>
+        <span class="t-title">foodsci-ai-research.py — 東海大學食品科學系</span>
+      </div>
+      <div class="terminal-body">
+        <canvas id="matrix-rain"></canvas>
+        <div class="terminal-lines" id="terminal-lines"></div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ═════ HONOR ROLL ═════ -->
-<section class="section" id="honor" aria-label="系所榮譽榜">
-  <div class="section-hdr reveal">
-    <div class="kicker">Recent Awards · 系所榮譽榜</div>
-    <h2 class="section-h2">近期獲獎</h2>
-    <p class="section-lead">食品科學系師生團隊於 2025-2026 年間，於全國性與校內跨域競賽中屢獲肯定。</p>
-  </div>
-
-  <!-- Card A: 農健智匯 -->
-  <article class="honor-card reveal">
-    <div class="honor-stamp" aria-label="冠軍">冠<br>軍</div>
-    <div class="honor-meta">2026 · 農業暨健康學院主辦</div>
-    <h3 class="honor-title">「農健智匯」AI 課程競賽<br>冠軍暨佳作雙料獎項</h3>
-
-    <img class="honor-hero-img" src="assets/nonghealth-banner.jpg" alt="農健智匯 AI 課程競賽獲獎主視覺" loading="lazy" width="1600" height="900">
-
-    <p class="honor-body">東海大學農業暨健康學院日前主辦「農健智匯」AI 課程成果發表競賽，聚焦於 AI 應用結合學院課程、跨域整合與創新、口頭簡報與海報，以及團隊合作等評選重點。食品科學系師生團隊憑藉扎實的食品專業知識，結合資料科學、生成式 AI 及數位媒體工具的學習成果，從涵蓋農業、食品、健康、運動、餐旅與永續等多面向的激烈競爭中脫穎而出，勇奪冠軍與佳作雙料獎項。</p>
-
-    <p class="honor-body">食科系近年持續將食品資料科學、智慧科技、精準營養與生成式 AI 融入課程及實作。此次得獎的兩項作品分別呈現風險資訊整理與生成式媒體製作的應用路徑，也共同指出一項重要原則：AI 工具必須建立在可查證資料、食品科學知識與人工審核之上，未來將持續透過課程、專題與跨系合作，協助學生建立問題定義、資料驗證、AI 工具運用及成果溝通能力，培育兼具食品科學專業與數位創新素養的人才，回應食品產業智慧化、健康促進與永續發展需求。</p>
-
-    <div class="honor-subhead">得獎作品：NutriMatch · 精準營養儀表板</div>
-    <img class="honor-product-img" src="assets/nutrimatch.jpg" alt="NutriMatch 精準營養儀表板產品情境圖" loading="lazy" width="1600" height="893">
-
-    <div class="video-wrap" id="video-wrap">
-      <video id="nutrimatch-video" muted playsinline loop preload="metadata" poster="assets/nutrimatch.jpg" aria-label="NutriMatch 專案示範影片">
-        <source src="assets/nutrimatch-demo.mp4" type="video/mp4">
-        您的瀏覽器不支援影片播放。
-      </video>
-      <button class="video-mute" onclick="toggleMute(this)" aria-label="開啟聲音">
-        <span aria-hidden="true">🔇</span>
-        <span class="mute-txt">開啟聲音</span>
-      </button>
+<section class="sect" id="honor">
+  <div class="sect-inner">
+    <div class="sect-hdr reveal">
+      <div class="sect-num">01</div>
+      <div class="sect-hdr-body">
+        <div class="eyebrow">
+          <span class="dot"></span>
+          <span>Recent Awards</span>
+        </div>
+        <h2 class="sect-h2">系所<br>近期獲獎</h2>
+        <p class="sect-lead">食品科學系師生團隊於 2025-2026 年間，於全國性與校內跨域競賽中屢獲肯定。</p>
+      </div>
     </div>
-    <div class="video-caption">NutriMatch 專案示範影片｜滑到此區自動播放</div>
 
-    <a class="honor-more" href="https://foodsci.thu.edu.tw/web/news/list.php?cid=5" target="_blank" rel="noopener noreferrer">於官網查看榮譽榜完整報導 →</a>
-  </article>
+    <div class="honor-grid">
+      <!-- Card A: 農健智匯 -->
+      <article class="honor-card reveal">
+        <div class="honor-photo">
+          <img src="assets/nonghealth-banner.jpg" alt="農健智匯 AI 課程競賽獲獎主視覺" loading="lazy" width="1600" height="900">
+          <div class="honor-photo-tag">Champion / 冠軍</div>
+        </div>
+        <div class="honor-body">
+          <div class="honor-num">01</div>
+          <div class="honor-meta">2026 · 農業暨健康學院主辦</div>
+          <h3 class="honor-title">「農健智匯」AI 課程競賽<br>冠軍暨佳作雙料獎項</h3>
 
-  <!-- Card B: 精準健康產業金獎 -->
-  <article class="honor-card reveal">
-    <div class="honor-stamp honor-stamp--gold" aria-label="金獎">金<br>獎</div>
-    <div class="honor-meta">2025-12-27 · 全國大專院校競賽</div>
-    <h3 class="honor-title">2025 全國大專院校<br>精準健康產業創新創業競賽<br>多元農業組 金獎</h3>
+          <p class="honor-txt">東海大學農業暨健康學院日前主辦「農健智匯」AI 課程成果發表競賽，聚焦於 AI 應用結合學院課程、跨域整合與創新、口頭簡報與海報，以及團隊合作等評選重點。食品科學系師生團隊憑藉扎實的食品專業知識，結合資料科學、生成式 AI 及數位媒體工具的學習成果，從涵蓋農業、食品、健康、運動、餐旅與永續等多面向的激烈競爭中脫穎而出，勇奪冠軍與佳作雙料獎項。</p>
 
-    <img class="honor-hero-img" src="assets/award-ceremony.jpg" alt="金獎頒獎合影：食品科學系師生團隊與評審" loading="lazy" width="1600" height="1067">
+          <p class="honor-txt">食科系近年持續將食品資料科學、智慧科技、精準營養與生成式 AI 融入課程及實作。此次得獎作品共同指出一項重要原則：AI 工具必須建立在可查證資料、食品科學知識與人工審核之上，未來將持續透過課程、專題與跨系合作，培育兼具食品科學專業與數位創新素養的人才。</p>
 
-    <p class="honor-body">食品科學系學生團隊於「2025 全國大專院校精準健康產業創新創業競賽」多元農業組奪得金獎，獲頒獎金新臺幣 30,000 元。此獎項聚焦於健康產業與農業跨域的創新創業提案，作品從問題定義、資料驗證、商業模式到成果溝通，均展現食品科學與數位工具的整合能力，也印證食科系在課程中導入 AI 應用與精準營養平台的教學成效。</p>
+          <div class="honor-subhead">Featured Project<span class="tc">NutriMatch · 精準營養儀表板</span></div>
+          <img class="honor-embed-img" src="assets/nutrimatch.jpg" alt="NutriMatch 精準營養儀表板產品情境圖" loading="lazy" width="1600" height="893">
 
-    <a class="honor-more" href="https://foodsci.thu.edu.tw/web/news/detail.php?cid=5&id=101" target="_blank" rel="noopener noreferrer">於官網查看完整報導 →</a>
-  </article>
+          <div class="video-wrap" id="video-wrap">
+            <video id="nutrimatch-video" muted playsinline loop preload="metadata" poster="assets/nutrimatch.jpg" aria-label="NutriMatch 專案示範影片">
+              <source src="assets/nutrimatch-demo.mp4" type="video/mp4">
+              您的瀏覽器不支援影片播放。
+            </video>
+            <button class="video-mute" onclick="toggleMute(this)" aria-label="開啟聲音">
+              <span aria-hidden="true">🔇</span>
+              <span class="mute-txt">SOUND</span>
+            </button>
+          </div>
+          <div class="video-cap">NUTRIMATCH DEMO · Autoplay on scroll</div>
+
+          <a class="honor-more" href="https://foodsci.thu.edu.tw/web/news/list.php?cid=5" target="_blank" rel="noopener noreferrer">
+            View report <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </article>
+
+      <!-- Card B: 金獎 -->
+      <article class="honor-card honor-card--reverse reveal">
+        <div class="honor-photo">
+          <img src="assets/award-ceremony.jpg" alt="金獎頒獎合影" loading="lazy" width="1600" height="1067">
+          <div class="honor-photo-tag">Gold / 金獎</div>
+        </div>
+        <div class="honor-body">
+          <div class="honor-num">02</div>
+          <div class="honor-meta">2025-12-27 · 全國大專院校競賽</div>
+          <h3 class="honor-title">2025 全國大專院校<br>精準健康產業<br>創新創業競賽</h3>
+          <div class="honor-subhead">Category<span class="tc">多元農業組　金獎 NT$30,000</span></div>
+          <p class="honor-txt">食品科學系學生團隊於「2025 全國大專院校精準健康產業創新創業競賽」多元農業組奪得金獎，獲頒獎金新臺幣 30,000 元。此獎項聚焦於健康產業與農業跨域的創新創業提案，作品從問題定義、資料驗證、商業模式到成果溝通，均展現食品科學與數位工具的整合能力。</p>
+          <a class="honor-more" href="https://foodsci.thu.edu.tw/web/news/detail.php?cid=5&id=101" target="_blank" rel="noopener noreferrer">
+            View report <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </article>
+    </div>
+  </div>
 </section>
 
 <!-- ═════ NEWS TIMELINE ═════ -->
-<section class="section section--tinted" id="news" aria-label="最新消息">
-  <div class="section-inner">
-    <div class="section-hdr reveal">
-      <div class="kicker">Updates · 系所近期動態</div>
-      <h2 class="section-h2">最新消息</h2>
+<section class="sect sect-fog" id="news">
+  <div class="sect-inner">
+    <div class="sect-hdr reveal">
+      <div class="sect-num">02</div>
+      <div class="sect-hdr-body">
+        <div class="eyebrow">
+          <span class="dot"></span>
+          <span>Updates</span>
+        </div>
+        <h2 class="sect-h2">最新<br>消息</h2>
+      </div>
     </div>
 
-    <ol class="timeline reveal">
+    <ol class="tl reveal">
       <li class="tl-item">
-        <div class="tl-date"><span class="tl-y">2026</span><span class="tl-md">05·12</span></div>
+        <div class="tl-num">01</div>
         <div class="tl-body">
-          <span class="tl-tag">系所公告</span>
-          <a class="tl-title" href="https://foodsci.thu.edu.tw/web/news/detail.php?cid=4&id=114" target="_blank" rel="noopener noreferrer">115 學年度申請入學 書審與面試指引及相關資訊（更新）</a>
+          <div class="tl-date"><span class="tl-cat">系所公告</span> <span>2026 · 05 · 12</span></div>
+          <a class="tl-title" href="https://foodsci.thu.edu.tw/web/news/detail.php?cid=4&id=114" target="_blank" rel="noopener noreferrer">115 學年度申請入學 書審與面試指引及相關資訊</a>
         </div>
+        <span class="tl-ext" aria-hidden="true">↗</span>
       </li>
       <li class="tl-item">
-        <div class="tl-date"><span class="tl-y">2026</span><span class="tl-md">04·18</span></div>
+        <div class="tl-num">02</div>
         <div class="tl-body">
-          <span class="tl-tag">其他訊息</span>
+          <div class="tl-date"><span class="tl-cat">其他訊息</span> <span>2026 · 04 · 18</span></div>
           <a class="tl-title" href="https://foodsci.thu.edu.tw/web/news/detail.php?cid=6&id=117" target="_blank" rel="noopener noreferrer">食品科學 × 人工智慧 × 農業科技——後 AI 時代最不可取代的專業</a>
         </div>
+        <span class="tl-ext" aria-hidden="true">↗</span>
       </li>
       <li class="tl-item">
-        <div class="tl-date"><span class="tl-y">2026</span><span class="tl-md">03·26</span></div>
+        <div class="tl-num">03</div>
         <div class="tl-body">
-          <span class="tl-tag">國際交流</span>
-          <a class="tl-title" href="https://foodsci.thu.edu.tw/web/news/detail.php?cid=6&id=115" target="_blank" rel="noopener noreferrer">日本鳥取大學訪東海 以食農交流串聯學術研究與產業前線</a>
+          <div class="tl-date"><span class="tl-cat">國際交流</span> <span>2026 · 03 · 26</span></div>
+          <a class="tl-title" href="https://foodsci.thu.edu.tw/web/news/detail.php?cid=6&id=115" target="_blank" rel="noopener noreferrer">日本鳥取大學訪東海　以食農交流串聯學術研究與產業前線</a>
         </div>
+        <span class="tl-ext" aria-hidden="true">↗</span>
       </li>
       <li class="tl-item">
-        <div class="tl-date"><span class="tl-y">2026</span><span class="tl-md">03·14</span></div>
+        <div class="tl-num">04</div>
         <div class="tl-body">
-          <span class="tl-tag">榮譽榜</span>
-          <a class="tl-title" href="https://foodsci.thu.edu.tw/web/news/detail.php?cid=5&id=111" target="_blank" rel="noopener noreferrer">東海勇奪教育部創新創業競賽金獎 以精準發酵咖啡技術驅動農業新未來</a>
+          <div class="tl-date"><span class="tl-cat">榮譽榜</span> <span>2026 · 03 · 14</span></div>
+          <a class="tl-title" href="https://foodsci.thu.edu.tw/web/news/detail.php?cid=5&id=111" target="_blank" rel="noopener noreferrer">東海勇奪教育部創新創業競賽金獎　以精準發酵咖啡技術驅動農業新未來</a>
         </div>
+        <span class="tl-ext" aria-hidden="true">↗</span>
       </li>
       <li class="tl-item">
-        <div class="tl-date"><span class="tl-y">2025</span><span class="tl-md">12·27</span></div>
+        <div class="tl-num">05</div>
         <div class="tl-body">
-          <span class="tl-tag">榮譽榜</span>
-          <a class="tl-title" href="https://foodsci.thu.edu.tw/web/news/detail.php?cid=5&id=101" target="_blank" rel="noopener noreferrer">2025 全國大專院校精準健康產業創新創業競賽 獲多元農業組金獎</a>
+          <div class="tl-date"><span class="tl-cat">榮譽榜</span> <span>2025 · 12 · 27</span></div>
+          <a class="tl-title" href="https://foodsci.thu.edu.tw/web/news/detail.php?cid=5&id=101" target="_blank" rel="noopener noreferrer">2025 全國大專院校精準健康產業創新創業競賽　獲多元農業組金獎</a>
         </div>
+        <span class="tl-ext" aria-hidden="true">↗</span>
       </li>
     </ol>
 
-    <a class="see-more" href="https://foodsci.thu.edu.tw/web/news/list.php" target="_blank" rel="noopener noreferrer">查看所有訊息公告 →</a>
+    <a class="see-all" href="https://foodsci.thu.edu.tw/web/news/list.php" target="_blank" rel="noopener noreferrer">
+      View all updates <span aria-hidden="true">→</span>
+    </a>
   </div>
 </section>
 
 <!-- ═════ CORE FIELDS ═════ -->
-<section class="section" id="fields" aria-label="核心領域">
-  <div class="section-hdr reveal">
-    <div class="kicker">Three Pillars · 核心領域</div>
-    <h2 class="section-h2">系所三大專業方向</h2>
-    <p class="section-lead">依循官方課程規劃，東海食科的學術訓練聚焦於三個相互支援的專業學群。</p>
-  </div>
+<section class="sect" id="fields">
+  <div class="sect-inner">
+    <div class="sect-hdr reveal">
+      <div class="sect-num">03</div>
+      <div class="sect-hdr-body">
+        <div class="eyebrow">
+          <span class="dot"></span>
+          <span>Three Pillars</span>
+        </div>
+        <h2 class="sect-h2">三大<br>核心領域</h2>
+        <p class="sect-lead">依循官方課程規劃，東海食科的學術訓練聚焦於三個相互支援的專業學群。</p>
+      </div>
+    </div>
 
-  <div class="fields-grid">
-    <article class="field-card reveal">
-      <div class="field-no">01</div>
-      <h3 class="field-title">食品科技</h3>
-      <p>食品化學、加工單元操作、產品研發與品質管制，從原料到成品的完整科學基礎，銜接大三專題研究與食品創新實務課程。</p>
-    </article>
-    <article class="field-card reveal">
-      <div class="field-no">02</div>
-      <h3 class="field-title">食品安全與 AI 智慧科技</h3>
-      <p>檢驗分析、微生物與毒理、食品法規；結合資料科學、生成式 AI 與精準營養平台，回應智慧化與健康促進的產業趨勢。</p>
-    </article>
-    <article class="field-card reveal">
-      <div class="field-no">03</div>
-      <h3 class="field-title">食品產業管理</h3>
-      <p>產業經營、行銷企劃、供應鏈與永續策略，強化研發成果與市場的雙向對接，培育具經營思維的食品人才。</p>
-    </article>
+    <div class="fields-grid reveal">
+      <div class="field">
+        <div class="field-num">01</div>
+        <div class="field-en">Food Technology</div>
+        <div class="field-title">食品科技</div>
+        <p>食品化學、加工單元操作、產品研發與品質管制，從原料到成品的完整科學基礎，銜接大三專題研究與食品創新實務課程。</p>
+      </div>
+      <div class="field">
+        <div class="field-num">02</div>
+        <div class="field-en">Safety × AI</div>
+        <div class="field-title">食品安全<br>與 AI 智慧科技</div>
+        <p>檢驗分析、微生物與毒理、食品法規；結合資料科學、生成式 AI 與精準營養平台，回應智慧化與健康促進的產業趨勢。</p>
+      </div>
+      <div class="field">
+        <div class="field-num">03</div>
+        <div class="field-en">Industry Management</div>
+        <div class="field-title">食品產業管理</div>
+        <p>產業經營、行銷企劃、供應鏈與永續策略，強化研發成果與市場的雙向對接，培育具經營思維的食品人才。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ PHOTO ESSAY · 40 YEARS ═════ -->
+<section class="sect" id="essay">
+  <div class="sect-inner">
+    <div class="essay-hdr reveal">
+      <div class="essay-hdr-l">
+        <div class="eyebrow">
+          <span class="dot"></span>
+          <span>Photo Essay · 影像紀事</span>
+        </div>
+        <h2>四十週年<br><em>Moments</em></h2>
+      </div>
+      <div class="essay-hdr-r">
+        <span class="big">10</span>
+        Photographs<br>2020–2025
+      </div>
+    </div>
+
+    <div class="photo-grid reveal">
+      <div class="photo" data-cap="01 · 40th Anniversary Banner"><img src="assets/event-01-banner-2020.jpg" alt="東海食科 40 週年活動主視覺看板" loading="lazy"></div>
+      <div class="photo" data-cap="02 · Alumni Picnic"><img src="assets/event-02-picnic-tents.jpg" alt="系友返校野餐活動" loading="lazy"></div>
+      <div class="photo" data-cap="03 · Faculty × Alumni"><img src="assets/event-03-alumni-thumbs.jpg" alt="教職員與傑出系友合影" loading="lazy"></div>
+      <div class="photo" data-cap="04 · Reunion Gathering"><img src="assets/event-04-picnic-balloons.jpg" alt="系友返校團聚" loading="lazy"></div>
+      <div class="photo" data-cap="05 · Ming Xian Plaque"><img src="assets/event-05-alumni-plaque.jpg" alt="銘賢堂前系友合影" loading="lazy"></div>
+      <div class="photo" data-cap="06 · Workshop Booth"><img src="assets/event-06-workshop-tree.jpg" alt="系上工作坊展示" loading="lazy"></div>
+      <div class="photo" data-cap="07 · Almond Workshop"><img src="assets/event-07-workshop-almond.jpg" alt="俊欽工作坊——杏仁瓦片與檸檬塔" loading="lazy"></div>
+      <div class="photo" data-cap="08 · Graduation"><img src="assets/event-08-graduates.jpg" alt="畢業班學位袍合影" loading="lazy"></div>
+      <div class="photo" data-cap="09 · 40th Backdrop"><img src="assets/event-09-40th-backdrop.jpg" alt="40 週年打卡背板" loading="lazy"></div>
+      <div class="photo" data-cap="10 · Fermentation Master"><img src="assets/event-10-fermentation-master.jpg" alt="The Master of Fermentation 酒噴高大賽" loading="lazy"></div>
+    </div>
+
+    <div class="essay-legend">
+      <div><span>01–06</span>40 週年慶祝活動</div>
+      <div><span>07–08</span>工作坊 · 畢業紀念</div>
+      <div><span>09–10</span>系學會活動</div>
+    </div>
   </div>
 </section>
 
 <!-- ═════ INTERACTIVE DEMOS ═════ -->
-<section class="section section--tinted" id="demos" aria-label="互動教學示範">
-  <div class="section-inner">
-    <div class="section-hdr reveal">
-      <div class="kicker">AI × Food Science · 互動教學示範</div>
-      <h2 class="section-h2">系上互動教學</h2>
-      <p class="section-lead">從烘焙到殺菌，用參數與慢動作動畫，解釋食品科學背後的物理化學原理。</p>
+<section class="sect" id="demos" style="padding-bottom:0">
+  <div class="sect-inner">
+    <div class="sect-hdr reveal">
+      <div class="sect-num">04</div>
+      <div class="sect-hdr-body">
+        <div class="eyebrow">
+          <span class="dot"></span>
+          <span>Interactive Demos</span>
+        </div>
+        <h2 class="sect-h2">AI × 食品科學<br>互動教學</h2>
+        <p class="sect-lead">從烘焙到殺菌，用參數與慢動作動畫，解釋食品科學背後的物理化學原理。</p>
+      </div>
     </div>
+  </div>
 
-    <div class="demo-grid">
-      <a class="demo-card reveal" href="2.bread_mobile.html">
-        <span class="demo-tag">Interactive Simulator</span>
-        <h3 class="demo-title">麵包科學模擬器</h3>
-        <p class="demo-desc">拉動酵母添加量、發酵溫度、烤箱參數，觀察從生麵團到金黃出爐的完整過程；即時顯示 CO₂ 產量、體積膨脹、色澤指數與蛋液光澤。</p>
-        <span class="demo-more">開啟模擬器 →</span>
-      </a>
-      <a class="demo-card demo-card--alt reveal" href="3.ultrasonic_theater.html">
-        <span class="demo-tag">Cinematic Theater</span>
-        <h3 class="demo-title">超聲波殺菌 · 空穴效應劇場</h3>
-        <p class="demo-desc">以慢動作重現空穴氣泡形成與內爆過程、擊穿 E. coli 細胞膜；並附上空穴強度、Weibull 殺菌動力學與 RSM 響應面的理論解說。</p>
-        <span class="demo-more">開啟劇場 →</span>
-      </a>
-    </div>
+  <div class="demos-grid reveal">
+    <a class="demo demo-a" href="2.bread_mobile.html">
+      <div class="demo-tag">Interactive Simulator</div>
+      <div class="demo-num">A</div>
+      <h3 class="demo-title">麵包科學模擬器</h3>
+      <p class="demo-desc">拉動酵母添加量、發酵溫度、烤箱參數，觀察從生麵團到金黃出爐的完整過程；即時顯示 CO₂ 產量、體積膨脹、色澤指數與蛋液光澤。</p>
+      <span class="demo-more">Launch simulator <span aria-hidden="true">→</span></span>
+    </a>
+    <a class="demo demo-b" href="3.ultrasonic_theater.html">
+      <div class="demo-tag">Cinematic Theater</div>
+      <div class="demo-num">B</div>
+      <h3 class="demo-title">超聲波殺菌<br>空穴效應劇場</h3>
+      <p class="demo-desc">以慢動作重現空穴氣泡形成與內爆過程、擊穿 E. coli 細胞膜；並附上空穴強度、Weibull 殺菌動力學與 RSM 響應面的理論解說。</p>
+      <span class="demo-more">Enter theater <span aria-hidden="true">→</span></span>
+    </a>
   </div>
 </section>
 
 <!-- ═════ QUICK NAV ═════ -->
-<section class="section" id="nav" aria-label="官網快速導覽">
-  <div class="section-hdr reveal">
-    <div class="kicker">Explore · 官網快速導覽</div>
-    <h2 class="section-h2">直達官網主要區塊</h2>
-    <p class="section-lead">以下連結一律於新分頁開啟官方網站，不做任何自動跳轉。</p>
-  </div>
+<section class="sect" id="nav">
+  <div class="sect-inner">
+    <div class="sect-hdr reveal">
+      <div class="sect-num">05</div>
+      <div class="sect-hdr-body">
+        <div class="eyebrow">
+          <span class="dot"></span>
+          <span>Explore</span>
+        </div>
+        <h2 class="sect-h2">官網<br>快速導覽</h2>
+        <p class="sect-lead">以下連結一律於新分頁開啟官方網站，不做任何自動跳轉。</p>
+      </div>
+    </div>
 
-  <div class="nav-grid">
-    <a class="nav-link" href="https://foodsci.thu.edu.tw/web/admissions/list.php" target="_blank" rel="noopener noreferrer">
-      <span class="nav-en">Admissions</span>
-      <span class="nav-tc">招生資訊</span>
-    </a>
-    <a class="nav-link" href="https://foodsci.thu.edu.tw/web/teacher/list.php" target="_blank" rel="noopener noreferrer">
-      <span class="nav-en">Faculty</span>
-      <span class="nav-tc">師資成員</span>
-    </a>
-    <a class="nav-link" href="https://foodsci.thu.edu.tw/web/page/page.php?scid=31&sid=29" target="_blank" rel="noopener noreferrer">
-      <span class="nav-en">Curriculum</span>
-      <span class="nav-tc">課程資訊</span>
-    </a>
-    <a class="nav-link" href="https://foodsci.thu.edu.tw/web/page/page.php?scid=40" target="_blank" rel="noopener noreferrer">
-      <span class="nav-en">Prospective</span>
-      <span class="nav-tc">高中生專區</span>
-    </a>
-    <a class="nav-link" href="https://foodsci.thu.edu.tw/web/page/page.php?scid=36&sid=49" target="_blank" rel="noopener noreferrer">
-      <span class="nav-en">International</span>
-      <span class="nav-tc">國際交流</span>
-    </a>
-    <a class="nav-link" href="https://foodsci.thu.edu.tw/web/page/page.php?scid=9&sid=22" target="_blank" rel="noopener noreferrer">
-      <span class="nav-en">About</span>
-      <span class="nav-tc">系所介紹</span>
-    </a>
+    <div class="nav-grid reveal">
+      <a class="nav-link" href="https://foodsci.thu.edu.tw/web/admissions/list.php" target="_blank" rel="noopener noreferrer">
+        <span class="nav-en">Admissions / 01</span>
+        <span class="nav-tc">招生資訊</span>
+        <span class="nav-arr">→</span>
+      </a>
+      <a class="nav-link" href="https://foodsci.thu.edu.tw/web/teacher/list.php" target="_blank" rel="noopener noreferrer">
+        <span class="nav-en">Faculty / 02</span>
+        <span class="nav-tc">師資成員</span>
+        <span class="nav-arr">→</span>
+      </a>
+      <a class="nav-link" href="https://foodsci.thu.edu.tw/web/page/page.php?scid=31&sid=29" target="_blank" rel="noopener noreferrer">
+        <span class="nav-en">Curriculum / 03</span>
+        <span class="nav-tc">課程資訊</span>
+        <span class="nav-arr">→</span>
+      </a>
+      <a class="nav-link" href="https://foodsci.thu.edu.tw/web/page/page.php?scid=40" target="_blank" rel="noopener noreferrer">
+        <span class="nav-en">Prospective / 04</span>
+        <span class="nav-tc">高中生專區</span>
+        <span class="nav-arr">→</span>
+      </a>
+      <a class="nav-link" href="https://foodsci.thu.edu.tw/web/page/page.php?scid=36&sid=49" target="_blank" rel="noopener noreferrer">
+        <span class="nav-en">International / 05</span>
+        <span class="nav-tc">國際交流</span>
+        <span class="nav-arr">→</span>
+      </a>
+      <a class="nav-link" href="https://foodsci.thu.edu.tw/web/page/page.php?scid=9&sid=22" target="_blank" rel="noopener noreferrer">
+        <span class="nav-en">About / 06</span>
+        <span class="nav-tc">系所介紹</span>
+        <span class="nav-arr">→</span>
+      </a>
+    </div>
   </div>
 </section>
 
 <!-- ═════ SOCIAL ═════ -->
-<section class="section section--tinted" id="social" aria-label="官方社群">
-  <div class="section-inner">
-    <div class="section-hdr reveal">
-      <div class="kicker">Follow Us · 官方社群</div>
-      <h2 class="section-h2">跟著東海食科</h2>
+<section class="sect sect-fog" id="social">
+  <div class="sect-inner">
+    <div class="sect-hdr reveal">
+      <div class="sect-num">06</div>
+      <div class="sect-hdr-body">
+        <div class="eyebrow">
+          <span class="dot"></span>
+          <span>Follow Us · 官方社群</span>
+        </div>
+        <h2 class="sect-h2">跟著<br>東海食科</h2>
+      </div>
     </div>
 
-    <div class="social-grid">
+    <div class="social-list reveal">
       <a class="social-link" href="https://www.instagram.com/thu_foodsci/" target="_blank" rel="noopener noreferrer">
-        <span class="social-icon">IG</span>
-        <span class="social-name">食品科學系官方 Instagram</span>
-        <span class="social-handle">@thu_foodsci</span>
+        <span class="social-ic">IG</span>
+        <span class="social-body">
+          <span class="social-name">食品科學系官方 Instagram</span>
+          <span class="social-handle">@thu_foodsci</span>
+        </span>
+        <span class="social-arr" aria-hidden="true">↗</span>
       </a>
       <a class="social-link" href="https://www.instagram.com/thu_fs/" target="_blank" rel="noopener noreferrer">
-        <span class="social-icon">IG</span>
-        <span class="social-name">食品科學系系學會 Instagram</span>
-        <span class="social-handle">@thu_fs</span>
+        <span class="social-ic">IG</span>
+        <span class="social-body">
+          <span class="social-name">食品科學系系學會 Instagram</span>
+          <span class="social-handle">@thu_fs</span>
+        </span>
+        <span class="social-arr" aria-hidden="true">↗</span>
       </a>
       <a class="social-link" href="https://www.facebook.com/profile.php?id=100057568714687" target="_blank" rel="noopener noreferrer">
-        <span class="social-icon">FB</span>
-        <span class="social-name">食品科學系 Facebook 粉絲專頁</span>
-        <span class="social-handle">臉書粉專</span>
+        <span class="social-ic">FB</span>
+        <span class="social-body">
+          <span class="social-name">食品科學系 Facebook 粉絲專頁</span>
+          <span class="social-handle">Fan Page</span>
+        </span>
+        <span class="social-arr" aria-hidden="true">↗</span>
       </a>
       <a class="social-link" href="https://www.facebook.com/groups/129065432347/" target="_blank" rel="noopener noreferrer">
-        <span class="social-icon">FB</span>
-        <span class="social-name">食品科學系家族聯歡會</span>
-        <span class="social-handle">系友社團</span>
+        <span class="social-ic">FB</span>
+        <span class="social-body">
+          <span class="social-name">食品科學系家族聯歡會</span>
+          <span class="social-handle">Alumni Group</span>
+        </span>
+        <span class="social-arr" aria-hidden="true">↗</span>
       </a>
       <a class="social-link" href="https://youtu.be/L8HVUB_k3Gs" target="_blank" rel="noopener noreferrer">
-        <span class="social-icon">YT</span>
-        <span class="social-name">認識東海大學食品科學系</span>
-        <span class="social-handle">系所介紹影片</span>
+        <span class="social-ic">YT</span>
+        <span class="social-body">
+          <span class="social-name">認識東海大學食品科學系</span>
+          <span class="social-handle">系所介紹影片</span>
+        </span>
+        <span class="social-arr" aria-hidden="true">↗</span>
       </a>
     </div>
   </div>
 </section>
 
 <!-- ═════ FOOTER ═════ -->
-<footer class="site-footer">
-  <div class="footer-brand">
-    <div class="footer-name">東海大學食品科學系</div>
-    <div class="footer-en">Department of Food Science, Tunghai University</div>
-    <div class="footer-est">Established 1980 · 創系逾四十年</div>
-  </div>
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-mark-row">
+      <div class="foot-mark">
+        <div class="foot-mark-crest" aria-hidden="true">Th</div>
+        <div>
+          <div class="foot-name">東海大學食品科學系</div>
+          <div class="foot-en">Department of Food Science, Tunghai University</div>
+        </div>
+      </div>
+      <div class="foot-est">Established 1980　·　Since Forty Years</div>
+    </div>
 
-  <div class="contact">
-    <div class="contact-line">
-      <span class="contact-lbl">電話</span>
-      <span><a href="tel:+886423590290">04-23590290</a>　<a href="tel:+886423590121">04-23590121</a> 分機 37301</span>
+    <div class="contact">
+      <div class="contact-item">
+        <div class="contact-lbl">Tel</div>
+        <div class="contact-val">
+          <a href="tel:+886423590290">04-23590290</a>　<a href="tel:+886423590121">04-23590121</a> #37301
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-lbl">Fax</div>
+        <div class="contact-val">04-23599059</div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-lbl">Email</div>
+        <div class="contact-val"><a href="mailto:foodsci@thu.edu.tw">foodsci@thu.edu.tw</a></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-lbl">Addr</div>
+        <div class="contact-val">40704 台中市西屯區臺灣大道四段 1727 號</div>
+      </div>
     </div>
-    <div class="contact-line">
-      <span class="contact-lbl">傳真</span>
-      <span>04-23599059</span>
+
+    <div class="foot-notice">
+      本頁為手機瀏覽用官方導覽入口，適合行動裝置查閱系所近況與快速導覽；官方完整內容以 <a href="https://foodsci.thu.edu.tw" target="_blank" rel="noopener noreferrer">foodsci.thu.edu.tw</a> 為準。
     </div>
-    <div class="contact-line">
-      <span class="contact-lbl">信箱</span>
-      <span><a href="mailto:foodsci@thu.edu.tw">foodsci@thu.edu.tw</a></span>
-    </div>
-    <div class="contact-line">
-      <span class="contact-lbl">地址</span>
-      <span>40704 台中市西屯區臺灣大道四段 1727 號　食品科學系</span>
+
+    <div class="foot-bot">
+      <div>© 2026 東海大學食品科學系 · All Rights Reserved.</div>
+      <div>MOBILE GATEWAY V3</div>
     </div>
   </div>
-
-  <div class="footer-notice">
-    本頁為手機瀏覽用官方導覽入口，適合行動裝置查閱系所近況與快速導覽；官方完整內容以 <a href="https://foodsci.thu.edu.tw" target="_blank" rel="noopener noreferrer">foodsci.thu.edu.tw</a> 為準。
-  </div>
-
-  <div class="footer-copy">© 2026 東海大學食品科學系　All Rights Reserved.</div>
 </footer>
 
 <script>
@@ -921,23 +1314,20 @@ function toggleMenu(){
     entries.forEach(e=>{
       if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
     });
-  },{threshold:.15,rootMargin:'0px 0px -60px 0px'});
+  },{threshold:.12,rootMargin:'0px 0px -60px 0px'});
   els.forEach(e=>io.observe(e));
 })();
 
-/* ─── Video autoplay on scroll into view ─── */
+/* ─── Video autoplay on scroll ─── */
 (function(){
   const vid=document.getElementById('nutrimatch-video');
   if(!vid) return;
-  // iOS Safari needs the muted+playsinline attributes already set, we have them.
   const io=new IntersectionObserver(entries=>{
     entries.forEach(e=>{
       if(e.isIntersecting){
         const p=vid.play();
-        if(p&&p.catch) p.catch(()=>{/* autoplay blocked; user can tap */});
-      }else{
-        vid.pause();
-      }
+        if(p&&p.catch) p.catch(()=>{});
+      }else{vid.pause();}
     });
   },{threshold:.4});
   io.observe(vid);
@@ -948,18 +1338,151 @@ function toggleMute(btn){
   const vid=document.getElementById('nutrimatch-video');
   vid.muted=!vid.muted;
   btn.querySelector('span[aria-hidden]').textContent=vid.muted?'🔇':'🔊';
-  btn.querySelector('.mute-txt').textContent=vid.muted?'開啟聲音':'關閉聲音';
+  btn.querySelector('.mute-txt').textContent=vid.muted?'SOUND':'MUTE';
   btn.setAttribute('aria-label',vid.muted?'開啟聲音':'關閉聲音');
-  // If user unmuted, try to play with sound
   if(!vid.muted){const p=vid.play();if(p&&p.catch) p.catch(()=>{});}
 }
 
-/* ─── Close menu when clicking a hash link ─── */
 document.querySelectorAll('.menu a[href^="#"]').forEach(a=>{
   a.addEventListener('click',()=>{
     if(document.body.classList.contains('menu-open')) toggleMenu();
   });
 });
+
+/* ═════════════════════════════════════════════════════════════
+   MATRIX RAIN + TERMINAL TYPEWRITER (preserved from v1)
+   ═════════════════════════════════════════════════════════════ */
+
+// ── MATRIX RAIN (amber) ──
+(function(){
+  const mc=document.getElementById('matrix-rain');
+  if(!mc) return;
+  const mctx=mc.getContext('2d');
+  function resizeMc(){ mc.width=mc.offsetWidth; mc.height=mc.offsetHeight; }
+  resizeMc();
+  window.addEventListener('resize',resizeMc);
+  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789アイウエオカキクケコ@#$%&*';
+  const fs=12; let cols, drops;
+  function initMc(){ cols=Math.floor(mc.width/fs); drops=Array(cols).fill(1); }
+  initMc();
+  setInterval(()=>{
+    mctx.fillStyle='rgba(6,15,30,0.09)';
+    mctx.fillRect(0,0,mc.width,mc.height);
+    mctx.font=fs+'px "Space Mono",monospace';
+    drops.forEach((y,i)=>{
+      const c=chars[Math.floor(Math.random()*chars.length)];
+      mctx.fillStyle='rgba(201,162,39,'+(Math.random()*.6+.15)+')';
+      mctx.fillText(c,i*fs,y*fs);
+      if(y*fs>mc.height&&Math.random()>.975) drops[i]=0;
+      drops[i]++;
+    });
+  },55);
+})();
+
+// ── TERMINAL TYPEWRITER ──
+const termLines=[
+  {type:'cmd',text:'$ python analyze_fermentation.py --model precision_yeast_v3'},
+  {type:'dim',text:'Loading microbial dataset... 12,847 samples'},
+  {type:'out',text:'Training AI fermentation model...'},
+  {type:'out-zh',text:'✓ 風味穩定度提升 +43% vs traditional method'},
+  {type:'success',text:'✓ Yeast strain: Saccharomyces cerevisiae THU-2025'},
+  {type:'cmd',text:'$ python food_safety_detect.py --sensor IoT_array'},
+  {type:'out',text:'Scanning pathogens across 256 sensor nodes...'},
+  {type:'out-zh',text:'✓ 大腸桿菌偵測：陰性 (E. coli: NEGATIVE)'},
+  {type:'success',text:'✓ HACCP_sensor.detect() → pathogen_free | acc: 99.1%'},
+  {type:'warn',text:'⚠ Aflatoxin: 1.2 ppb → within TFDA regulatory limit'},
+  {type:'drone',text:''},
+  {type:'out',text:'UAV fleet: 8 units | Coverage: 320 hectares'},
+  {type:'out-zh',text:'✓ 作物病蟲害偵測完成 → 染病區域：2.3%'},
+  {type:'out',text:'Water usage ↓ 28% via ML irrigation prediction'},
+  {type:'cmd',text:'$ python recipe_ai.py --target "low-sodium soy sauce"'},
+  {type:'out-zh',text:'✓ 配方生成完畢 → sodium ↓42% | umami: 9.2/10'},
+  {type:'cmd',text:'$ _'},
+];
+
+const tlContainer=document.getElementById('terminal-lines');
+
+termLines.forEach((line)=>{
+  if(line.type==='drone'){
+    const dr=document.createElement('div');
+    dr.className='drone-row';
+    dr.style.opacity='0';
+    dr.innerHTML='<div class="drone-icon-anim">🚁</div><div style="flex:1"><div style="font-size:9px;color:rgba(201,162,39,.5);margin-bottom:4px;font-family:\'Space Mono\',monospace;letter-spacing:.08em">UAV AGRICULTURAL SCAN</div><div class="drone-bar"><div class="drone-bar-fill"></div></div></div><div style="color:#3EE577;font-size:10px;font-family:\'Space Mono\',monospace;margin-left:8px">72%</div>';
+    tlContainer.appendChild(dr); return;
+  }
+  const div=document.createElement('div');
+  div.className='t-line '+line.type;
+  div.style.opacity='0';
+  div.dataset.fullText = line.text;
+  if(line.type==='cmd'){
+    div.innerHTML='<span class="t-prompt">$</span><span class="t-typed"></span><span class="t-cursor">█</span>';
+  } else {
+    div.innerHTML='<span class="t-typed"></span>';
+  }
+  tlContainer.appendChild(div);
+});
+
+function typewriterLine(el, fullText, speed, onDone){
+  el.style.opacity = '1';
+  const typedEl = el.querySelector('.t-typed');
+  const cursorEl = el.querySelector('.t-cursor');
+  if(!typedEl){ el.style.opacity='1'; if(onDone) onDone(); return; }
+  const text = fullText.replace(/^\$ /, '');
+  let i = 0;
+  typedEl.textContent = '';
+  if(cursorEl) cursorEl.style.display='inline';
+  const interval = setInterval(()=>{
+    typedEl.textContent += text[i];
+    i++;
+    if(i >= text.length){
+      clearInterval(interval);
+      if(cursorEl) cursorEl.style.display='none';
+      if(onDone) onDone();
+    }
+  }, speed);
+}
+
+function showDroneLine(el, onDone){
+  el.style.opacity='1';
+  setTimeout(onDone, 400);
+}
+
+function runTerminal(){
+  const els = Array.from(tlContainer.children);
+  let idx = 0;
+  function next(){
+    if(idx >= els.length) return;
+    const el = els[idx++];
+    if(el.classList.contains('drone-row')){
+      showDroneLine(el, ()=> setTimeout(next, 150));
+    } else {
+      const fullText = el.dataset.fullText || '';
+      const isCmd = el.classList.contains('cmd');
+      const speed = isCmd ? 28 : 12;
+      if(el.classList.contains('dim') || fullText.length < 20){
+        el.style.opacity='1';
+        const typedEl = el.querySelector('.t-typed');
+        if(typedEl) typedEl.textContent = fullText.replace(/^\$ /,'');
+        setTimeout(next, 80);
+      } else {
+        typewriterLine(el, fullText, speed, ()=> setTimeout(next, isCmd ? 180 : 80));
+      }
+    }
+  }
+  next();
+}
+
+let terminalPlayed = false;
+const termIO=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting && !terminalPlayed){
+      terminalPlayed = true;
+      runTerminal();
+      termIO.unobserve(e.target);
+    }
+  });
+},{threshold:.05});
+termIO.observe(document.querySelector('.terminal-container'));
 </script>
 
 </body>
