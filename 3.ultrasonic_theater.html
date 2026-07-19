@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>超聲波殺菌 · 空穴效應劇場｜東海大學食品科學系</title>
+<meta name="description" content="以慢動作重現超聲波空穴氣泡形成與內爆過程、擊穿 E. coli 細胞膜，並解說空穴強度、Weibull 殺菌動力學與 RSM 響應面理論。">
+<meta name="theme-color" content="#0A2E5C">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --paper:#F7F0DA;
+  --paper-lo:#EFE7C7;
+  --paper-hi:#FCF7E7;
+  --paper-card:#FFFDF3;
+  --navy:#0A2E5C;
+  --navy-lo:#1E4A82;
+  --gold:#B48628;
+  --gold-hi:#D4A94A;
+  --red:#A82A26;
+  --ink:#17223B;
+  --ink-2:#4C5468;
+  --ink-3:#7A7659;
+  --hair:#D0C69F;
+  --hair-2:#E4DBB4;
+  --serif:'Noto Serif TC','PingFang TC','Songti TC',serif;
+  --sans:'Noto Sans TC','PingFang TC','Microsoft JhengHei',-apple-system,sans-serif;
+  --mono:'Roboto Mono','Menlo',ui-monospace,monospace;
+  --gutter:20px;
+  --touch:44px;
+  --radius:4px;
+  --radius-lg:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;line-height:1.65;
+  padding-top:56px;
+  min-height:100vh;
+}
+img,video{display:block;max-width:100%}
+a{color:var(--navy-lo);text-decoration:none}
+button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
+
+/* Top bar */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(247,240,218,.94);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--hair);
+  height:56px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 var(--gutter);
+}
+.back{
+  display:flex;align-items:center;gap:8px;
+  color:var(--navy);font-weight:500;font-size:14px;
+  min-height:var(--touch);padding-right:12px;
+}
+.back .arr{font-family:var(--mono);font-size:16px}
+.title-mini{
+  font-family:var(--serif);font-weight:900;font-size:14px;
+  color:var(--navy);letter-spacing:.02em;text-align:right;line-height:1.2;
+}
+.title-mini span{
+  display:block;font-family:var(--mono);font-weight:500;font-size:9px;
+  letter-spacing:.14em;color:var(--gold);text-transform:uppercase;margin-top:2px;
+}
+
+/* Poster header */
+.poster{
+  padding:32px var(--gutter) 12px;
+  border-bottom:1px solid var(--hair);
+}
+.poster-kicker{
+  font-family:var(--mono);font-size:11px;letter-spacing:.24em;
+  color:var(--gold);text-transform:uppercase;
+  padding-bottom:10px;
+}
+.poster-kicker::before{
+  content:'';display:inline-block;width:24px;height:1px;background:var(--gold);
+  margin-right:12px;vertical-align:middle;transform:translateY(-3px);
+}
+.poster-title{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(1.8rem,7vw,2.4rem);
+  color:var(--navy);line-height:1.15;letter-spacing:-.01em;
+  margin-bottom:14px;
+}
+.poster-sub{
+  font-family:var(--serif);font-weight:700;font-size:15px;
+  color:var(--ink-2);border-top:1px solid var(--hair-2);
+  padding-top:12px;letter-spacing:.03em;
+}
+.poster-lead{
+  color:var(--ink-2);font-size:14px;line-height:1.85;margin-top:14px;
+}
+.playback-meta{
+  display:flex;gap:16px;flex-wrap:wrap;
+  padding:14px 0 4px;margin-top:14px;
+  border-top:1px dashed var(--hair-2);
+  font-family:var(--mono);font-size:11px;letter-spacing:.08em;
+  color:var(--ink-3);
+}
+.playback-meta span strong{color:var(--navy);font-weight:500}
+
+/* THEATER container */
+.theater{
+  background:#0A0A0A;
+  padding:0;
+  display:flex;justify-content:center;align-items:center;
+  border-top:2px solid var(--gold);
+  border-bottom:2px solid var(--gold);
+  position:relative;
+}
+#stage{
+  position:relative;background:#ffffff;
+  box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 0 0 1px rgba(255,255,255,.08);
+  overflow:hidden;
+  width:180px;height:320px; /* replaced by JS */
+  margin:20px 0;
+}
+#stage canvas{display:block;width:100%;height:100%}
+.theater-caption{
+  position:absolute;bottom:6px;left:0;right:0;text-align:center;
+  font-family:var(--mono);font-size:10px;letter-spacing:.2em;
+  color:rgba(212,169,74,.7);text-transform:uppercase;
+  pointer-events:none;
+}
+
+/* Section */
+.section{padding:40px var(--gutter);max-width:720px;margin:0 auto}
+.section-hdr{margin-bottom:22px}
+.no-tag{
+  display:inline-flex;align-items:baseline;gap:12px;
+  padding-bottom:8px;margin-bottom:12px;
+  border-bottom:1px solid var(--hair);
+}
+.no-tag .no{
+  font-family:var(--serif);font-weight:900;font-size:34px;
+  color:var(--gold);line-height:1;letter-spacing:-.03em;
+}
+.no-tag .lbl{
+  font-family:var(--mono);font-size:10px;letter-spacing:.22em;
+  color:var(--ink-3);text-transform:uppercase;padding-bottom:4px;
+}
+.section-h2{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(1.35rem,5.5vw,1.8rem);
+  color:var(--navy);line-height:1.25;letter-spacing:-.005em;
+}
+
+/* Formula card */
+.formula{
+  background:var(--paper-card);
+  border:1px solid var(--hair);
+  border-radius:var(--radius-lg);
+  padding:22px 22px 26px;margin:20px 0 24px;
+  position:relative;
+}
+.formula::before{
+  content:'FORMULA';
+  position:absolute;top:-8px;left:20px;
+  background:var(--paper);padding:0 8px;
+  font-family:var(--mono);font-size:10px;font-weight:500;
+  letter-spacing:.2em;color:var(--gold);
+}
+.eq{
+  font-family:'STIX Two Math','Cambria Math',var(--serif);
+  font-size:clamp(1.05rem,4.4vw,1.35rem);
+  color:var(--navy);text-align:center;
+  padding:18px 8px;
+  background:linear-gradient(180deg,var(--paper-hi) 0%,var(--paper-card) 100%);
+  border-radius:var(--radius);
+  border:1px dashed var(--hair);margin-bottom:16px;
+  line-height:1.6;letter-spacing:.02em;
+  overflow-x:auto;overflow-y:hidden;
+  white-space:nowrap;
+}
+.eq i{font-style:italic;font-family:'STIX Two Math','Cambria Math','Times New Roman',serif}
+.eq sub{font-size:.7em;vertical-align:-.15em}
+.eq sup{font-size:.72em;vertical-align:.4em}
+.eq .op{padding:0 4px;color:var(--ink-2)}
+.eq .prop{color:var(--gold);padding:0 6px;font-weight:700}
+
+.param-tbl{
+  width:100%;font-size:13.5px;line-height:1.75;
+  border-collapse:collapse;
+}
+.param-tbl th,.param-tbl td{
+  text-align:left;padding:8px 10px;
+  border-bottom:1px solid var(--hair-2);
+  vertical-align:top;
+}
+.param-tbl th{
+  background:var(--paper-hi);color:var(--navy);
+  font-family:var(--serif);font-weight:700;font-size:13px;
+  letter-spacing:.02em;width:38%;
+}
+.param-tbl td{color:var(--ink-2)}
+.param-tbl code{
+  font-family:var(--mono);font-size:12.5px;
+  color:var(--navy);background:var(--paper-hi);
+  padding:1px 5px;border-radius:2px;letter-spacing:.02em;
+}
+
+.explain{
+  color:var(--ink);font-size:14.5px;line-height:1.9;
+  text-align:justify;margin-bottom:14px;
+}
+.explain strong{color:var(--navy);font-weight:700}
+.callout{
+  background:linear-gradient(180deg,rgba(180,134,40,.06) 0%,rgba(180,134,40,.02) 100%);
+  border-left:3px solid var(--gold);
+  padding:14px 16px;font-size:13.5px;line-height:1.85;
+  color:var(--ink-2);border-radius:0 var(--radius) var(--radius) 0;
+  margin-top:14px;
+}
+.callout strong{color:var(--gold);font-weight:700}
+
+/* Warning notice */
+.notice{
+  background:rgba(168,42,38,.05);
+  border:1px solid rgba(168,42,38,.2);
+  border-left:3px solid var(--red);
+  padding:14px 16px;border-radius:0 var(--radius) var(--radius) 0;
+  font-size:13px;line-height:1.75;color:var(--ink-2);
+  margin:24px 0;
+}
+.notice strong{color:var(--red);font-weight:700}
+
+/* Footer */
+.foot{
+  background:var(--navy);color:var(--paper-hi);
+  padding:28px var(--gutter);text-align:center;
+  border-top:3px solid var(--gold);
+}
+.foot-name{
+  font-family:var(--serif);font-weight:900;font-size:16px;
+  color:var(--paper-hi);letter-spacing:.02em;
+}
+.foot-en{
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+  color:rgba(252,247,231,.55);margin-top:4px;
+}
+.foot-back{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:16px;padding:10px 20px;
+  background:var(--gold);color:var(--navy);
+  font-family:var(--serif);font-weight:700;font-size:14px;
+  border-radius:var(--radius);min-height:var(--touch);
+}
+
+@media(min-width:900px){
+  body{padding-top:64px}
+  .topbar{height:64px;padding:0 40px}
+  .section{padding:56px 40px;max-width:840px}
+  .poster{padding:56px 40px 24px}
+}
+@media(prefers-reduced-motion:reduce){
+  .theater{opacity:.5}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="index.html" class="back" aria-label="返回首頁">
+    <span class="arr" aria-hidden="true">←</span>
+    <span>返回</span>
+  </a>
+  <div class="title-mini">
+    超聲波空穴效應劇場
+    <span>Ultrasonic Cavitation Theater</span>
+  </div>
+</header>
+
+<!-- Poster header -->
+<section class="poster">
+  <div class="poster-kicker">Cinematic Theater · 動畫劇場</div>
+  <h1 class="poster-title">超聲波殺菌<br>空穴效應劇場</h1>
+  <div class="poster-sub">壓縮／稀疏波　→　微氣泡成核與內爆　→　E. coli 細胞裂解</div>
+  <p class="poster-lead">此頁以慢動作重現超聲波在液相中誘發空穴（cavitation）氣泡的完整過程：從壓力波建立、氣泡雲密集形成，到單一氣泡內爆時釋放的極壓、震波與微射流，最後擊穿 E. coli 桿狀菌的細胞膜。動畫下方為理論公式解說。</p>
+  <div class="playback-meta">
+    <span><strong>播放速度</strong> · 2× 加速</span>
+    <span><strong>單次循環</strong> · 約 10 秒</span>
+    <span><strong>觀看方式</strong> · 自動循環播放</span>
+  </div>
+</section>
+
+<!-- THEATER -->
+<div class="theater" role="img" aria-label="超聲波空穴效應慢動作動畫">
+  <div id="stage"><canvas id="c"></canvas></div>
+</div>
+
+<!-- FORMULA 1 -->
+<section class="section">
+  <div class="section-hdr">
+    <div class="no-tag">
+      <span class="no">01</span>
+      <span class="lbl">Cavitation Intensity</span>
+    </div>
+    <h2 class="section-h2">空穴強度</h2>
+  </div>
+
+  <p class="explain">超聲波在液體中傳播時，聲壓振幅 <strong>P<sub>A</sub></strong> 與液體的蒸氣壓 <strong>P<sub>v</sub></strong> 決定了空穴事件的強度。當聲壓振幅超過液體的 Blake 閾值後，微氣泡開始從液體中被「拉出」成核，並隨壓力波的稀疏相膨脹、壓縮相崩潰。溫度上升會使液體蒸氣壓 P<sub>v</sub> 提高，反而削弱空穴的內爆強度——這是 thermosonication 中需要謹慎控制的變因。</p>
+
+  <div class="formula">
+    <div class="eq"><i>I</i><span class="prop">∝</span><i>P</i><sub>A</sub><sup>2</sup> <span class="op">·</span> ( 1 <span class="op">−</span> <i>P</i><sub>v</sub> ／ <i>P</i><sub>A</sub> )</div>
+    <table class="param-tbl">
+      <tr><th><code>I</code>　空穴強度</th><td>單位時間、單位體積內釋放的空穴能量（相對值）</td></tr>
+      <tr><th><code>P<sub>A</sub></code>　聲壓振幅</th><td>由超音波器輸入功率與探頭效率決定；功率提高，P<sub>A</sub> 提高，空穴事件更劇烈</td></tr>
+      <tr><th><code>P<sub>v</sub></code>　液體蒸氣壓</th><td>受溫度顯著影響；溫度上升 → P<sub>v</sub> 上升 → 括號項下降 → 空穴強度反而減弱</td></tr>
+    </table>
+    <div class="callout"><strong>設計意涵：</strong>單純提高功率不必然帶來更好殺菌效果；當溫度失控導致 P<sub>v</sub> 接近 P<sub>A</sub> 時，內爆強度會急劇下降。實務上常配合冷卻循環，讓 P<sub>A</sub> 與 P<sub>v</sub> 差距最大化。</div>
+  </div>
+</section>
+
+<!-- FORMULA 2 -->
+<section class="section" style="background:var(--paper-lo);max-width:none;padding-left:0;padding-right:0;">
+  <div style="max-width:720px;margin:0 auto;padding:0 var(--gutter)">
+    <div class="section-hdr">
+      <div class="no-tag">
+        <span class="no">02</span>
+        <span class="lbl">Weibull Kinetics</span>
+      </div>
+      <h2 class="section-h2">殺菌動力學<br>Weibull 模型</h2>
+    </div>
+
+    <p class="explain">傳統一級動力學（First-order）假設細菌死亡速率與存活菌數成正比，殺菌曲線在對數座標上為直線；但超聲波殺菌實務上常出現「初期快速下降＋後期尾巴（tailing）」的非線性行為，一級模型無法描述。<strong>Weibull 模型</strong>透過兩個參數 α 與 β 描述整條存活曲線的形狀，是超聲波殺菌研究中最常用的動力學模型之一。</p>
+
+    <div class="formula">
+      <div class="eq">log ( <i>N</i>／<i>N</i><sub>0</sub> ) <span class="prop">=</span> <span class="op">−</span> ( <i>t</i>／α )<sup>β</sup></div>
+      <table class="param-tbl">
+        <tr><th><code>N</code>　時間 t 後存活菌數</th><td>單位 CFU／mL</td></tr>
+        <tr><th><code>N<sub>0</sub></code>　初始菌數</th><td>單位 CFU／mL</td></tr>
+        <tr><th><code>t</code>　處理時間</th><td>單位 min 或 s</td></tr>
+        <tr><th><code>α</code>　尺度參數<br>（scale parameter）</th><td>對應「達到 1 個對數殺滅所需時間」，是溫度與超音波功率的函數；α 越小代表殺菌越快</td></tr>
+        <tr><th><code>β</code>　形狀參數<br>（shape parameter）</th><td>β &gt; 1：初期慢、後期加速（凹形）；β &lt; 1：初期快、後期減緩（tailing，凸形）；β = 1：退化為一級動力學</td></tr>
+      </table>
+      <div class="callout"><strong>學術意涵：</strong>β 值的高低反映菌群的異質性——若菌落中有部分細胞抗性顯著高於其他細胞（例如處於芽孢狀態或聚集態），會使 β &lt; 1 形成 tailing。α、β 通常以溫度 T 與功率 P 的二次多項式表示，並可代入下方 RSM 響應面進一步最佳化。</div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMULA 3 -->
+<section class="section">
+  <div class="section-hdr">
+    <div class="no-tag">
+      <span class="no">03</span>
+      <span class="lbl">Response Surface</span>
+    </div>
+    <h2 class="section-h2">多因子最佳化<br>RSM 響應面</h2>
+  </div>
+
+  <p class="explain">超聲波殺菌實務中，同時受<strong>功率、頻率、處理時間、溫度、初始菌數</strong>等多個變因影響，這些變因彼此可能存在交互作用（例如高溫時空穴強度變化不同於室溫）。<strong>響應面法（Response Surface Methodology, RSM）</strong>透過二次多項式擬合殺菌率或存活率的響應曲面，並用最小平方法求出各項係數，最終可預測任意條件下的殺菌效果，並找出最佳操作點。</p>
+
+  <div class="formula">
+    <div class="eq">
+      <i>Y</i> <span class="prop">=</span> β<sub>0</sub>
+      <span class="op">+</span> Σ β<sub>i</sub> <i>x</i><sub>i</sub>
+      <span class="op">+</span> Σ β<sub>ii</sub> <i>x</i><sub>i</sub><sup>2</sup>
+      <span class="op">+</span> Σ β<sub>ij</sub> <i>x</i><sub>i</sub> <i>x</i><sub>j</sub>
+    </div>
+    <table class="param-tbl">
+      <tr><th><code>Y</code>　響應變數</th><td>殺菌率 log(N₀／N)、細胞破裂比例、或存活率</td></tr>
+      <tr><th><code>x<sub>i</sub></code>　自變數<br>（factor）</th><td>常見為功率（W）、頻率（kHz）、處理時間（min）、溫度（°C）等，均經編碼變換為 −1／0／+1 三水準</td></tr>
+      <tr><th><code>β<sub>0</sub></code>　截距項</th><td>所有因子皆為中心點時的響應</td></tr>
+      <tr><th><code>β<sub>i</sub></code>　一次項係數</th><td>單一因子的線性效應</td></tr>
+      <tr><th><code>β<sub>ii</sub></code>　二次項係數</th><td>因子的曲率效應——決定是否存在最佳值</td></tr>
+      <tr><th><code>β<sub>ij</sub></code>　交互作用項</th><td>兩因子之間的協同或拮抗——超聲波與溫度的協同效應（thermosonication）通常於此顯現</td></tr>
+    </table>
+    <div class="callout"><strong>實驗設計配套：</strong>RSM 通常搭配中央合成設計（Central Composite Design, CCD）或 Box-Behnken 設計，以最少的實驗次數估計所有係數。所得響應面模型可再結合遺傳演算法（Genetic Algorithm）尋找全域最佳解，或以蒙地卡羅模擬評估係數不確定性對最佳條件的影響。</div>
+  </div>
+
+  <div class="notice"><strong>教學示意提醒：</strong>本頁動畫為呈現空穴效應機制的示意動畫，並非實驗量測結果；三項公式為超聲波殺菌研究的理論基礎，具體係數值需由研究者以實驗數據擬合。此頁不揭露任何未發表之實驗原始數據。</div>
+</section>
+
+<!-- Footer -->
+<footer class="foot">
+  <div class="foot-name">東海大學食品科學系</div>
+  <div class="foot-en">Department of Food Science, Tunghai University</div>
+  <a class="foot-back" href="index.html">
+    <span aria-hidden="true">←</span>
+    返回系所首頁
+  </a>
+</footer>
+
+
+<!-- ═════════════════════════════════════════════════════════════
+     ULTRASONIC CAVITATION ANIMATION
+     Original 20-second cinematic loop, rendered at 2× real-time
+     Modified: dt×2 for playback speed, container-fit instead of fullscreen
+     ═════════════════════════════════════════════════════════════ -->
+<script>
+"use strict";
+(function(){
+  // ---------- Canvas (logical 720x1280, DPR-scaled) ----------
+  const W=720, H=1280;
+  const canvas=document.getElementById('c');
+  const ctx=canvas.getContext('2d');
+  const DPR=Math.min(window.devicePixelRatio||1,2);
+  canvas.width=W*DPR; canvas.height=H*DPR;
+  const LOOP=20.0;
+
+  // ---------- Fit the stage inside the theater container (not fullscreen) ----------
+  const stage=document.getElementById('stage');
+  const theater=document.querySelector('.theater');
+  function fitStage(){
+    // Target: fill theater width up to a max, keep 9:16 aspect, cap height to ~78vh on mobile
+    const availW=Math.min(theater.clientWidth, 720);
+    const maxH=Math.min(window.innerHeight*0.78, 1000);
+    const aspect=W/H;
+    let dw=availW, dh=dw/aspect;
+    if(dh>maxH){dh=maxH;dw=dh*aspect;}
+    stage.style.width=dw+'px'; stage.style.height=dh+'px';
+  }
+  fitStage();
+  window.addEventListener('resize',fitStage);
+  window.addEventListener('orientationchange',function(){setTimeout(fitStage,300);});
+
+  // ---------- Helpers ----------
+  const TAU=Math.PI*2;
+  const clamp=(v,a,b)=>v<a?a:(v>b?b:v);
+  const lerp=(a,b,t)=>a+(b-a)*t;
+  const smooth=t=>t*t*(3-2*t);
+  const easeOutCubic=p=>1-Math.pow(1-p,3);
+  const easeInQuint=p=>p*p*p*p*p;
+  function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+  const LX=-0.42, LY=-0.46;
+
+  // Pre-rendered glossy 3D bubble sprite
+  function createBubbleSprite(){
+    const S=256, off=document.createElement('canvas'); off.width=S; off.height=S;
+    const o=off.getContext('2d');
+    const cx=128, cy=128, R=116;
+    let g1=o.createRadialGradient(cx,cy,R*0.55,cx,cy,R*1.07);
+    g1.addColorStop(0,'rgba(60,105,150,0)');
+    g1.addColorStop(0.80,'rgba(55,100,150,0.06)');
+    g1.addColorStop(0.94,'rgba(24,64,114,0.36)');
+    g1.addColorStop(1,'rgba(24,64,114,0)');
+    o.fillStyle=g1; o.beginPath(); o.arc(cx,cy,R*1.07,0,TAU); o.fill();
+    let g2=o.createRadialGradient(cx-R*0.22,cy-R*0.22,R*0.08,cx,cy,R);
+    g2.addColorStop(0,'rgba(205,232,255,0)');
+    g2.addColorStop(0.68,'rgba(170,210,246,0.05)');
+    g2.addColorStop(1,'rgba(120,178,230,0.18)');
+    o.fillStyle=g2; o.beginPath(); o.arc(cx,cy,R,0,TAU); o.fill();
+    o.save(); o.beginPath(); o.arc(cx,cy,R,0,TAU); o.clip(); o.globalCompositeOperation='lighter';
+    const ccx=cx-LX*R*0.85, ccy=cy-LY*R*0.85;
+    let cg=o.createRadialGradient(ccx,ccy,0,ccx,ccy,R*0.7);
+    cg.addColorStop(0,'rgba(255,255,255,0.55)'); cg.addColorStop(0.6,'rgba(220,240,255,0.12)'); cg.addColorStop(1,'rgba(255,255,255,0)');
+    o.fillStyle=cg; o.fillRect(cx-R,cy-R,2*R,2*R);
+    const scx=cx+LX*R*0.5, scy=cy+LY*R*0.5;
+    let sg=o.createRadialGradient(scx,scy,0,scx,scy,R*0.5);
+    sg.addColorStop(0,'rgba(255,255,255,0.98)'); sg.addColorStop(0.35,'rgba(255,255,255,0.28)'); sg.addColorStop(1,'rgba(255,255,255,0)');
+    o.fillStyle=sg; o.fillRect(cx-R,cy-R,2*R,2*R);
+    o.restore();
+    o.globalCompositeOperation='lighter';
+    o.lineWidth=R*0.05; o.strokeStyle='rgba(255,255,255,0.5)';
+    o.beginPath(); o.arc(cx,cy,R*0.965,0,TAU); o.stroke();
+    o.beginPath(); o.arc(cx+LX*R*0.52,cy+LY*R*0.52,R*0.09,0,TAU); o.fillStyle='rgba(255,255,255,0.95)'; o.fill();
+    o.globalCompositeOperation='source-over';
+    return {canvas:off, R:R};
+  }
+  const SPRITE=createBubbleSprite();
+  function drawBubble(x,y,r){
+    if(r<0.8) return;
+    const s=r/SPRITE.R;
+    ctx.drawImage(SPRITE.canvas, x-128*s, y-128*s, 256*s, 256*s);
+  }
+
+  // SCENE CONFIG
+  const rng=mulberry32(20240611);
+  const bacteriaCfg=[
+    {x:205,y:432,ang: 0.35,L:27,R:11},
+    {x:520,y:498,ang:-0.60,L:24,R:10},
+    {x:332,y:602,ang: 0.90,L:29,R:12},
+    {x:472,y:718,ang: 0.18,L:25,R:10},
+    {x:198,y:822,ang:-0.42,L:28,R:11},
+    {x:540,y:900,ang: 0.70,L:24,R:10},
+    {x:330,y:980,ang:-0.92,L:27,R:11}
+  ];
+  const CLOUD_N=140;
+  const cloud=[];
+  for(let i=0;i<CLOUD_N;i++){
+    cloud.push({
+      x: 55 + rng()*610,
+      y: 320 + rng()*740,
+      r0: 5 + Math.pow(rng(),1.6)*20,
+      phase: rng()*TAU,
+      appearT: 2.4 + rng()*3.4,
+      fadeT: 16.6 + rng()*2.6
+    });
+  }
+  const K_SPACE=0.020, OMEGA=TAU*1.0;
+  const heroCollapse=[11.6,12.5,13.4,14.3,15.2,16.1,17.0];
+  const HG=4.0, HO=1.0, HC=0.6, HTOT=HG+HO+HC;
+  const heroes=[];
+  bacteriaCfg.forEach((b,i)=>{
+    const Rmax=58 + (i%3)*9;
+    const jang=b.ang + Math.PI/2 + (i%2?0.5:-0.5);
+    const dist=b.R + Rmax*0.70;
+    heroes.push({
+      x:b.x+Math.cos(jang)*dist, y:b.y+Math.sin(jang)*dist,
+      Rmax, birth:heroCollapse[i]-HTOT, collapse:heroCollapse[i], target:i
+    });
+  });
+  const popEvents=[];
+  for(let i=0;i<20;i++){
+    popEvents.push({t: 6.0 + rng()*10.0, idx: (rng()*CLOUD_N)|0});
+  }
+  popEvents.sort((a,b)=>a.t-b.t);
+
+  let bacteria=[], flashes=[], shocks=[], jets=[], debris=[];
+  let heroFired=new Array(heroes.length).fill(false);
+  let popFired=new Array(popEvents.length).fill(false);
+  let shakeAmp=0;
+
+  function makeBacterium(cfg){
+    return {x:cfg.x,y:cfg.y,ang:cfg.ang,L:cfg.L,R:cfg.R,baseX:cfg.x,baseY:cfg.y,
+            phase:Math.random()*TAU,state:'alive',stressT:0,jetDir:0,dieT:0};
+  }
+  function resetScene(){
+    bacteria=bacteriaCfg.map(makeBacterium);
+    flashes.length=0; shocks.length=0; jets.length=0; debris.length=0;
+    heroFired.fill(false); popFired.fill(false); shakeAmp=0;
+  }
+  resetScene();
+
+  // DEBRIS
+  function spawnDebris(x,y,dir,strength,rupture){
+    const nMist=Math.round(8+strength*16);
+    for(let i=0;i<nMist;i++){
+      const a=Math.random()*TAU, sp=(40+Math.random()*240)*strength;
+      debris.push({type:'mist',x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-20,r:1+Math.random()*2.4,life:0,dur:0.4+Math.random()*0.5});
+    }
+    if(rupture){
+      for(let i=0;i<16;i++){
+        const a=dir+(Math.random()-0.5)*2.2, sp=60+Math.random()*180;
+        debris.push({type:'cyto',x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,r:2+Math.random()*3.5,life:0,dur:0.9+Math.random()*0.8});
+      }
+      for(let i=0;i<9;i++){
+        const a=Math.random()*TAU, sp=70+Math.random()*160;
+        debris.push({type:'memb',x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,seg:6+Math.random()*8,rot:Math.random()*TAU,spin:(Math.random()-0.5)*10,life:0,dur:0.8+Math.random()*0.7});
+      }
+    }
+  }
+  function updateDebris(dt){
+    for(let i=debris.length-1;i>=0;i--){
+      const p=debris[i]; p.life+=dt;
+      if(p.life>=p.dur){debris.splice(i,1);continue;}
+      p.x+=p.vx*dt; p.y+=p.vy*dt; p.vx*=(1-2.4*dt); p.vy*=(1-2.4*dt);
+      if(p.type==='cyto') p.vy+=26*dt;
+      if(p.type==='memb'){p.vy+=18*dt; p.rot+=p.spin*dt;}
+    }
+  }
+  function drawDebris(){
+    for(const p of debris){
+      const k=1-p.life/p.dur;
+      if(p.type==='mist'){
+        ctx.globalCompositeOperation='lighter';
+        ctx.fillStyle='rgba(210,235,255,'+(0.7*k)+')';
+        ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,TAU);ctx.fill();
+        ctx.globalCompositeOperation='source-over';
+      } else if(p.type==='cyto'){
+        ctx.fillStyle='rgba(70,190,150,'+(0.65*k)+')';
+        ctx.beginPath();ctx.arc(p.x,p.y,p.r*(0.6+0.4*k),0,TAU);ctx.fill();
+        ctx.fillStyle='rgba(255,255,255,'+(0.35*k)+')';
+        ctx.beginPath();ctx.arc(p.x-p.r*0.3,p.y-p.r*0.3,p.r*0.35,0,TAU);ctx.fill();
+      } else {
+        ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);
+        ctx.strokeStyle='rgba(20,120,110,'+(0.7*k)+')';ctx.lineWidth=2.4;ctx.lineCap='round';
+        ctx.beginPath();ctx.moveTo(-p.seg,0);ctx.lineTo(p.seg,0);ctx.stroke();ctx.restore();
+      }
+    }
+  }
+
+  // SHOCKWAVE
+  function spawnShock(x,y,strength){
+    shocks.push({x,y,r:2,max:80+strength*180,speed:560+strength*300,life:0});
+  }
+  function updateShocks(dt){for(let i=shocks.length-1;i>=0;i--){const s=shocks[i];s.r+=s.speed*dt;if(s.r>=s.max)shocks.splice(i,1);}}
+  function drawShocks(){
+    ctx.globalCompositeOperation='lighter';
+    for(const s of shocks){
+      const p=s.r/s.max, a=1-p;
+      ctx.strokeStyle='rgba(255,255,255,'+(0.6*a)+')';ctx.lineWidth=clamp(7*(1-p),0.6,7);
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,TAU);ctx.stroke();
+      ctx.strokeStyle='rgba(120,180,240,'+(0.38*a)+')';ctx.lineWidth=clamp(12*(1-p),0.6,12);
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r*0.82,0,TAU);ctx.stroke();
+    }
+    ctx.globalCompositeOperation='source-over';
+  }
+
+  // FLASH
+  function spawnFlash(x,y,power){
+    const streaks=[]; const n=6+Math.floor(power*5);
+    for(let i=0;i<n;i++) streaks.push(Math.random()*TAU+i);
+    flashes.push({x,y,power,life:0,dur:0.36,streaks});
+  }
+  function updateFlashes(dt){for(let i=flashes.length-1;i>=0;i--){flashes[i].life+=dt;if(flashes[i].life>=flashes[i].dur)flashes.splice(i,1);}}
+  function drawFlashes(){
+    ctx.globalCompositeOperation='lighter';
+    for(const f of flashes){
+      const p=f.life/f.dur, a=Math.pow(1-p,1.6), R=f.power*(18+95*easeOutCubic(p));
+      const g=ctx.createRadialGradient(f.x,f.y,0,f.x,f.y,R);
+      g.addColorStop(0,'rgba(255,255,255,'+(0.95*a)+')');
+      g.addColorStop(0.25,'rgba(220,240,255,'+(0.55*a)+')');
+      g.addColorStop(1,'rgba(180,220,255,0)');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(f.x,f.y,R,0,TAU);ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,'+(0.9*a)+')';
+      ctx.beginPath();ctx.arc(f.x,f.y,f.power*4*(1-p*0.5),0,TAU);ctx.fill();
+      const sl=f.power*(30+130*easeOutCubic(p));
+      for(const ang of f.streaks){
+        ctx.save();ctx.translate(f.x,f.y);ctx.rotate(ang);
+        const sg=ctx.createLinearGradient(-sl,0,sl,0);
+        sg.addColorStop(0,'rgba(255,255,255,0)');sg.addColorStop(0.5,'rgba(255,255,255,'+(0.55*a)+')');sg.addColorStop(1,'rgba(255,255,255,0)');
+        ctx.fillStyle=sg;ctx.fillRect(-sl,-1.2,sl*2,2.4);ctx.restore();
+      }
+    }
+    ctx.globalCompositeOperation='source-over';
+  }
+
+  // MICROJET
+  function spawnJet(x0,y0,x1,y1){jets.push({x0,y0,x1,y1,life:0,dur:0.22});}
+  function updateJets(dt){for(let i=jets.length-1;i>=0;i--){jets[i].life+=dt;if(jets[i].life>=jets[i].dur)jets.splice(i,1);}}
+  function drawJets(){
+    ctx.globalCompositeOperation='lighter';
+    for(const j of jets){
+      const p=j.life/j.dur, a=Math.sin(p*Math.PI);
+      const hx=lerp(j.x0,j.x1,easeOutCubic(p)), hy=lerp(j.y0,j.y1,easeOutCubic(p));
+      const g=ctx.createLinearGradient(j.x0,j.y0,hx,hy);
+      g.addColorStop(0,'rgba(180,225,255,0)');g.addColorStop(1,'rgba(255,255,255,'+(0.8*a)+')');
+      ctx.strokeStyle=g;ctx.lineWidth=3.4;ctx.lineCap='round';
+      ctx.beginPath();ctx.moveTo(j.x0,j.y0);ctx.lineTo(hx,hy);ctx.stroke();
+      ctx.fillStyle='rgba(255,255,255,'+(0.85*a)+')';ctx.beginPath();ctx.arc(hx,hy,3.2,0,TAU);ctx.fill();
+    }
+    ctx.globalCompositeOperation='source-over';
+  }
+
+  // ACOUSTIC FIELD
+  function acoustic(lt,y,phase){ return Math.sin(lt*OMEGA - y*K_SPACE + phase); }
+  function fieldEnvelope(lt){
+    let e=smooth(clamp((lt-2.2)/2.2,0,1));
+    e*= smooth(clamp((19.4-lt)/2.4,0,1));
+    return e;
+  }
+  function drawWaves(lt,intensity){
+    if(intensity<=0.001) return;
+    const sx=360, sy=-40, speed=165, spacing=38, maxR=1560;
+    for(let k=0;k<52;k++){
+      let r=(lt*speed + k*spacing) % maxR;
+      const t01=r/maxR;
+      const a=intensity*0.28*(1-t01);
+      if(a<=0.002) continue;
+      ctx.strokeStyle='rgba(52,110,175,'+a+')';
+      ctx.lineWidth=4.4;
+      ctx.beginPath();ctx.arc(sx,sy,r,0.12,Math.PI-0.12);ctx.stroke();
+      if(r>5){
+        ctx.globalCompositeOperation='lighter';
+        ctx.strokeStyle='rgba(255,255,255,'+(a*0.66)+')';
+        ctx.lineWidth=1.6;
+        ctx.beginPath();ctx.arc(sx,sy,r-4,0.12,Math.PI-0.12);ctx.stroke();
+        ctx.globalCompositeOperation='source-over';
+      }
+    }
+    for(let k=0;k<52;k++){
+      let r=(lt*speed*1.0 + k*spacing + spacing*0.5) % maxR;
+      const a=intensity*0.11*(1-r/maxR);
+      if(a<=0.002) continue;
+      ctx.strokeStyle='rgba(84,146,202,'+a+')';ctx.lineWidth=1.9;
+      ctx.beginPath();ctx.arc(sx,sy,r,0.12,Math.PI-0.12);ctx.stroke();
+    }
+  }
+  function drawCaustics(lt){
+    const blobs=[[180,520,150],[520,760,175],[360,340,140],[300,1000,160]];
+    blobs.forEach((bl,i)=>{
+      const dx=Math.sin(lt*0.4+i*1.7)*40, dy=Math.cos(lt*0.33+i*2.1)*34;
+      const g=ctx.createRadialGradient(bl[0]+dx,bl[1]+dy,0,bl[0]+dx,bl[1]+dy,bl[2]);
+      g.addColorStop(0,'rgba(120,170,215,0.05)');g.addColorStop(1,'rgba(120,170,215,0)');
+      ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    });
+  }
+
+  // BACTERIUM
+  function drawCapsule(L,R){
+    ctx.beginPath();ctx.moveTo(-L,-R);ctx.lineTo(L,-R);
+    ctx.arc(L,0,R,-Math.PI/2,Math.PI/2);ctx.lineTo(-L,R);
+    ctx.arc(-L,0,R,Math.PI/2,-Math.PI/2);ctx.closePath();
+  }
+  function drawBacterium(b){
+    if(b.state==='dead') return;
+    ctx.save();
+    let jx=0,jy=0,scale=1,bodyAlpha=0.92,stressGlow=0;
+    if(b.state==='stressed'){
+      const s=clamp(b.stressT/0.14,0,1);
+      jx=(Math.random()-0.5)*4*s; jy=(Math.random()-0.5)*4*s; scale=1+0.05*s; stressGlow=s;
+    }
+    if(b.state==='ruptured'){
+      const p=clamp(b.dieT/0.18,0,1); scale=1+0.7*p; bodyAlpha=0.92*(1-p);
+    }
+    ctx.translate(b.x+jx,b.y+jy);ctx.rotate(b.ang);ctx.scale(scale,scale);
+    const L=b.L-b.R, R=b.R;
+    const bg=ctx.createLinearGradient(0,-R,0,R);
+    bg.addColorStop(0,'rgba(120,220,190,'+bodyAlpha+')');
+    bg.addColorStop(0.5,'rgba(60,180,150,'+bodyAlpha+')');
+    bg.addColorStop(1,'rgba(28,130,110,'+bodyAlpha+')');
+    ctx.fillStyle=bg;drawCapsule(L,R);ctx.fill();
+    ctx.lineWidth=1.8;ctx.strokeStyle='rgba(15,95,82,'+bodyAlpha+')';drawCapsule(L,R);ctx.stroke();
+    if(stressGlow>0){ctx.fillStyle='rgba(230,90,70,'+(0.28*stressGlow*bodyAlpha)+')';drawCapsule(L,R);ctx.fill();}
+    ctx.fillStyle='rgba(20,110,95,'+(0.5*bodyAlpha)+')';
+    ctx.beginPath();ctx.ellipse(-L*0.25,0,R*0.55,R*0.45,0,0,TAU);ctx.fill();
+    ctx.beginPath();ctx.ellipse(L*0.30,R*0.1,R*0.5,R*0.4,0,0,TAU);ctx.fill();
+    ctx.globalCompositeOperation='lighter';
+    const hg=ctx.createLinearGradient(0,-R,0,0);
+    hg.addColorStop(0,'rgba(255,255,255,'+(0.75*bodyAlpha)+')');hg.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=hg;ctx.beginPath();ctx.ellipse(-L*0.1,-R*0.42,L*0.9,R*0.32,0,0,TAU);ctx.fill();
+    ctx.globalCompositeOperation='source-over';
+    ctx.restore();
+  }
+  function updateBacteria(dt){
+    for(const b of bacteria){
+      if(b.state==='dead') continue;
+      if(b.state==='alive'||b.state==='stressed'){
+        b.phase+=dt*1.3;
+        b.x=b.baseX+Math.sin(b.phase*0.9)*3.0+Math.sin(b.phase*2.3)*1.2;
+        b.y=b.baseY+Math.cos(b.phase*0.8)*3.0+Math.cos(b.phase*1.9)*1.2;
+        b.ang+=dt*0.12*Math.sin(b.phase*0.5);
+      }
+      if(b.state==='stressed'){
+        b.stressT+=dt;
+        if(b.stressT>=0.14){b.state='ruptured';b.dieT=0;spawnFlash(b.x,b.y,1.0);spawnDebris(b.x,b.y,b.jetDir,1.0,true);}
+      } else if(b.state==='ruptured'){
+        b.dieT+=dt; if(b.dieT>=0.20) b.state='dead';
+      }
+    }
+  }
+  function hitBacterium(idx,fx,fy){
+    const b=bacteria[idx]; if(!b||b.state!=='alive') return;
+    b.state='stressed';b.stressT=0;b.jetDir=Math.atan2(b.y-fy,b.x-fx);spawnJet(fx,fy,b.x,b.y);
+  }
+
+  // HERO
+  function heroRadius(h,llt){
+    if(llt<0||llt>=HTOT) return -1;
+    if(llt<HG) return h.Rmax*easeOutCubic(llt/HG);
+    if(llt<HG+HO){const p=(llt-HG)/HO;return h.Rmax*(1+0.055*Math.sin(p*Math.PI*4));}
+    const q=(llt-(HG+HO))/HC;
+    if(q<0.14) return h.Rmax*(1+0.12*(q/0.14));
+    const qq=(q-0.14)/0.86; return h.Rmax*1.12*(1-easeInQuint(qq));
+  }
+  function timeScale(lt){
+    let m=1;
+    for(const h of heroes){
+      const Tc=h.collapse;
+      if(lt<Tc-HC-0.25||lt>Tc+0.7) continue;
+      let s;
+      if(lt<=Tc){ const p=(Tc-lt)/(HC+0.2); s=0.05+0.95*Math.pow(clamp(p,0,1),0.5); }
+      else { const p=(lt-Tc)/0.7; s=0.05+0.95*Math.pow(clamp(p,0,1),0.9); }
+      if(s<m) m=s;
+    }
+    return m;
+  }
+  function drawHeroPressure(h){
+    const q=h.q;
+    if(q<=0) return;
+    ctx.globalCompositeOperation='lighter';
+    const base=h.Rmax*1.55;
+    for(let m=0;m<4;m++){
+      const rr=Math.max(h.r + base*(1-q)*(1-m*0.14), h.r);
+      const a=(0.18+0.72*q)*(1-m*0.20);
+      ctx.strokeStyle='rgba(150,205,255,'+a+')';
+      ctx.lineWidth=3+4*q;
+      ctx.beginPath();ctx.arc(h.x,h.y,rr,0,TAU);ctx.stroke();
+    }
+    const cr=Math.max(h.r*1.5,6);
+    const cg=ctx.createRadialGradient(h.x,h.y,0,h.x,h.y,cr);
+    cg.addColorStop(0,'rgba(255,255,255,'+(0.92*q*q)+')');cg.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=cg;ctx.beginPath();ctx.arc(h.x,h.y,cr,0,TAU);ctx.fill();
+    ctx.globalCompositeOperation='source-over';
+    const dr=h.r*1.75;
+    const dh=ctx.createRadialGradient(h.x,h.y,h.r*0.9,h.x,h.y,dr);
+    dh.addColorStop(0,'rgba(16,44,84,0)');dh.addColorStop(0.6,'rgba(14,40,80,'+(0.44*q)+')');dh.addColorStop(1,'rgba(14,40,80,0)');
+    ctx.fillStyle=dh;ctx.beginPath();ctx.arc(h.x,h.y,dr,0,TAU);ctx.fill();
+  }
+
+  // LABELS (Traditional Chinese)
+  const captions=[
+    [0.0, 2.4, "透明水體中的細菌懸浮液"],
+    [2.4, 6.0, "超聲波場建立——壓縮與稀疏波交替傳遞"],
+    [6.0,11.0, "空穴雲密集形成——微氣泡成核、生長、擁擠"],
+    [11.0,16.6,"慢動作內爆——極壓、震波與微射流"],
+    [16.6,20.0,"細胞裂解——空穴效應之後"]
+  ];
+  function drawLabels(lt){
+    // Title top-left (Chinese)
+    ctx.fillStyle='rgba(20,20,20,0.88)';ctx.textAlign='left';
+    ctx.font='700 26px "Noto Serif TC","PingFang TC",serif';
+    ctx.fillText("超聲波空穴效應 · 慢動作重播", 28, 46);
+    ctx.font='500 18px "Noto Sans TC","PingFang TC",sans-serif';
+    ctx.fillStyle='rgba(60,60,60,0.72)';
+    ctx.fillText("壓縮／稀疏波 → 氣泡內爆 → 細胞裂解", 28, 76);
+
+    // Timeline caption bottom (Chinese)
+    let cap='',ca=0;
+    for(const c of captions){
+      if(lt>=c[0]&&lt<c[1]){const seg=c[1]-c[0],p=(lt-c[0])/seg;ca=clamp(Math.min(smooth(p/0.15),smooth((1-p)/0.15)),0,1);cap=c[2];break;}
+    }
+    if(cap){
+      ctx.textAlign='center';
+      ctx.font='700 26px "Noto Serif TC","PingFang TC",serif';
+      ctx.fillStyle='rgba(15,15,15,'+(0.92*ca)+')';
+      ctx.fillText(cap,W/2,H-64);
+    }
+    ctx.textAlign='left';
+  }
+
+  // ═════════════════════════════════════════════════════════════
+  // MAIN LOOP — dt multiplied by 2 for 2× playback speed
+  // ═════════════════════════════════════════════════════════════
+  let lastFrame=null, simTime=0, prevLt=0;
+  const SPEED_MULT=2.0;
+
+  function frame(now){
+    if(lastFrame===null){lastFrame=now;requestAnimationFrame(frame);return;}
+    let dt=(now-lastFrame)/1000 * SPEED_MULT; lastFrame=now;
+    if(dt>0.10) dt=0.10; // cap raised proportionally
+
+    let lt=simTime%LOOP;
+    const ts=timeScale(lt);
+    simTime += dt*ts;
+    lt=simTime%LOOP;
+    if(lt<prevLt) resetScene();
+    prevLt=lt;
+    const sdt=dt*ts;
+
+    updateBacteria(sdt);
+    updateShocks(sdt); updateFlashes(sdt); updateJets(sdt); updateDebris(sdt);
+
+    for(let i=0;i<heroes.length;i++){
+      const h=heroes[i], llt=lt-h.birth;
+      if(!heroFired[i] && llt>=HTOT && llt<HTOT+0.4){
+        heroFired[i]=true;
+        spawnFlash(h.x,h.y,1.95);
+        spawnShock(h.x,h.y,1.35); spawnShock(h.x,h.y,0.8);
+        spawnDebris(h.x,h.y,0,1.4,false);
+        shakeAmp=Math.max(shakeAmp,15);
+        if(h.target>=0) hitBacterium(h.target,h.x,h.y);
+      }
+    }
+    for(let i=0;i<popEvents.length;i++){
+      const e=popEvents[i];
+      if(!popFired[i] && lt>=e.t && lt<e.t+0.3){
+        popFired[i]=true;
+        const cb=cloud[e.idx];
+        spawnFlash(cb.x,cb.y,0.5); spawnShock(cb.x,cb.y,0.35);
+        spawnDebris(cb.x,cb.y,0,0.4,false);
+        shakeAmp=Math.max(shakeAmp,1.6);
+      }
+    }
+    shakeAmp*=Math.pow(0.0025,dt);
+
+    const E=fieldEnvelope(lt);
+
+    const shX=(Math.random()-0.5)*shakeAmp, shY=(Math.random()-0.5)*shakeAmp;
+    ctx.setTransform(DPR,0,0,DPR,shX*DPR,shY*DPR);
+    ctx.globalAlpha=1; ctx.globalCompositeOperation='source-over';
+    ctx.fillStyle='#ffffff';ctx.fillRect(-8,-8,W+16,H+16);
+
+    drawCaustics(lt);
+    drawWaves(lt,E);
+
+    for(const b of bacteria) drawBacterium(b);
+
+    const list=[]; const heroLive=[];
+    for(const cb of cloud){
+      let af=smooth(clamp((lt-cb.appearT)/1.2,0,1));
+      af*=smooth(clamp((cb.fadeT-lt)/1.4,0,1));
+      if(af<=0.01) continue;
+      const A=acoustic(lt,cb.y,cb.phase);
+      const r=cb.r0*af*(0.45+0.55*E)*(1+0.8*E*A);
+      if(r>0.8) list.push({x:cb.x,y:cb.y,r});
+    }
+    for(const h of heroes){
+      const r=heroRadius(h,lt-h.birth);
+      if(r>0.8){
+        const llt=lt-h.birth;
+        let q=0; if(llt>HG+HO) q=clamp((llt-(HG+HO))/HC,0,1);
+        list.push({x:h.x,y:h.y,r});
+        heroLive.push({x:h.x,y:h.y,r,q,Rmax:h.Rmax});
+      }
+    }
+    list.sort((a,b)=>b.r-a.r);
+    for(const b of list) drawBubble(b.x,b.y,b.r);
+
+    for(const h of heroLive) drawHeroPressure(h);
+
+    drawShocks(); drawJets(); drawFlashes(); drawDebris();
+
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    drawLabels(lt);
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+
+</body>
+</html>

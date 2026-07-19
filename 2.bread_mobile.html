@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>麵包科學模擬器 × AI — 東海大學食品科學系</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+:root{
+  --amber:#C8780A;--amber-light:#F0C050;--amber-dark:#8B4A06;
+  --dark-bg:#0E0A04;--card-bg:#1A1208;
+  --card-border:rgba(200,120,10,0.25);
+  --text-primary:#F5EDD0;--text-secondary:#B8A070;
+  --touch-min:48px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{background:var(--dark-bg);color:var(--text-primary);font-family:'Noto Sans TC',sans-serif;min-height:100vh;overflow-x:hidden;font-size:16px}
+
+/* ── HERO ── */
+.hero{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4rem 1.25rem 3rem;position:relative;background:radial-gradient(ellipse at 50% 60%,#2A1A08 0%,#0E0A04 70%);overflow:hidden}
+.orb{position:absolute;border-radius:50%;pointer-events:none;opacity:0.07}
+.orb:nth-child(1){width:min(500px,130vw);height:min(500px,130vw);background:var(--amber);top:-20%;left:-20%;animation:float 9s ease-in-out infinite}
+.orb:nth-child(2){width:min(350px,90vw);height:min(350px,90vw);background:#C84010;bottom:-15%;right:-15%;animation:float 7s ease-in-out infinite 3s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+
+.ai-badge{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,rgba(80,120,255,0.18),rgba(200,120,10,0.18));border:1px solid rgba(120,160,255,0.35);color:#A0C0FF;font-size:clamp(10px,2.5vw,12px);font-weight:700;letter-spacing:1.5px;padding:7px 16px;border-radius:20px;margin-bottom:1.2rem;text-transform:uppercase}
+.ai-dot{width:7px;height:7px;border-radius:50%;background:#60A0FF;flex-shrink:0;animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(96,160,255,0.4)}50%{opacity:.6;box-shadow:0 0 0 6px rgba(96,160,255,0)}}
+
+.hero h1{font-size:clamp(1.9rem,8vw,4rem);font-weight:900;line-height:1.15;margin-bottom:.9rem;background:linear-gradient(135deg,#F8F2DC 0%,#F0C050 50%,#C8780A 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:clamp(.9rem,3.5vw,1.1rem);color:var(--text-secondary);max-width:520px;line-height:1.7;margin-bottom:1rem}
+.pills{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:1.5rem}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:20px;font-size:clamp(10px,2.5vw,11px);font-weight:700;border:1px solid}
+.pill-b{background:rgba(60,100,220,0.15);border-color:rgba(100,150,255,0.3);color:#90B8FF}
+.pill-a{background:rgba(200,120,10,0.15);border-color:rgba(200,120,10,0.35);color:#F0C060}
+.pill-g{background:rgba(40,120,70,0.18);border-color:rgba(60,160,100,0.35);color:#70D090}
+.hero-cv-wrap{margin-bottom:1.8rem;position:relative}
+.hero-cv-wrap canvas{border-radius:14px;border:1px solid var(--card-border);display:block;width:min(200px,55vw);height:auto}
+.cv-label{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text-secondary);text-transform:uppercase;background:rgba(14,10,4,0.75);padding:3px 9px;border-radius:7px;white-space:nowrap}
+.btn-start{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--amber-dark),#E09020);color:#0E0A04;font-size:clamp(1rem,4vw,1.1rem);font-weight:900;padding:16px 36px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 4px 24px rgba(200,120,10,0.4);text-decoration:none;font-family:'Noto Sans TC',sans-serif;min-height:var(--touch-min);touch-action:manipulation}
+.scroll-hint{position:absolute;bottom:1.2rem;left:50%;transform:translateX(-50%);color:var(--text-secondary);font-size:11px;letter-spacing:1px;display:flex;flex-direction:column;align-items:center;gap:5px;animation:sbounce 2.2s ease-in-out infinite}
+.scroll-hint::after{content:'';width:1px;height:32px;background:linear-gradient(to bottom,var(--amber),transparent)}
+@keyframes sbounce{0%,100%{opacity:.45;transform:translateX(-50%) translateY(0)}50%{opacity:1;transform:translateX(-50%) translateY(-5px)}}
+
+/* ── AI SECTION ── */
+.ai-section{padding:2.5rem 1.25rem;background:linear-gradient(135deg,rgba(20,30,80,0.45) 0%,rgba(14,10,4,0) 60%);border-top:1px solid rgba(80,120,255,0.12);border-bottom:1px solid rgba(80,120,255,0.1)}
+.ai-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center}
+.ai-text h2{font-size:clamp(1.3rem,4vw,1.9rem);font-weight:900;margin-bottom:.75rem}
+.ai-text h2 span{background:linear-gradient(135deg,#90B8FF,#60D0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ai-text p{color:var(--text-secondary);font-size:clamp(12px,3vw,14px);line-height:1.75;margin-bottom:.9rem}
+.ai-feats{display:flex;flex-direction:column;gap:9px}
+.ai-feat{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:rgba(60,100,200,0.1);border:1px solid rgba(80,120,255,0.18);border-radius:10px}
+.ai-feat-icon{font-size:17px;flex-shrink:0;margin-top:1px}
+.ai-feat-txt{font-size:clamp(11px,2.8vw,13px);color:var(--text-secondary);line-height:1.55}
+.ai-feat-txt strong{color:var(--text-primary);display:block;margin-bottom:1px}
+.ai-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ai-stat{background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:12px;text-align:center}
+.ai-stat .snum{font-size:clamp(1.4rem,4vw,1.8rem);font-weight:900;background:linear-gradient(135deg,#90B8FF,#60D0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ai-stat .slb{font-size:clamp(9px,2.2vw,11px);color:var(--text-secondary);margin-top:2px;font-weight:700;letter-spacing:.4px}
+.ai-stat-wide{grid-column:1/-1;background:linear-gradient(135deg,rgba(60,100,200,0.15),rgba(200,120,10,0.1));border-color:rgba(100,150,255,0.25)}
+
+/* ── SIM SECTION ── */
+.sim-section{padding:2.5rem 1.25rem;max-width:1100px;margin:0 auto}
+.sec-hdr{text-align:center;margin-bottom:2rem}
+.sec-hdr h2{font-size:clamp(1.4rem,4.5vw,2.2rem);font-weight:900;margin-bottom:.55rem}
+.sec-hdr p{color:var(--text-secondary);font-size:clamp(12px,3vw,14px);max-width:500px;margin:0 auto;line-height:1.7}
+.stage-tabs{display:flex;gap:8px;margin-bottom:1.1rem;flex-wrap:wrap}
+.stab{padding:11px 20px;border-radius:50px;border:1px solid var(--card-border);font-size:clamp(12px,3.5vw,14px);font-weight:700;cursor:pointer;background:var(--card-bg);color:var(--text-secondary);transition:all .2s;font-family:'Noto Sans TC',sans-serif;min-height:var(--touch-min);touch-action:manipulation;flex:1;text-align:center}
+.stab.on{background:linear-gradient(135deg,var(--amber-dark),var(--amber));color:#0E0A04;border-color:var(--amber);box-shadow:0 2px 14px rgba(200,120,10,0.35)}
+
+/* sim layout: desktop side-by-side, mobile stacked */
+.sim-layout{display:grid;grid-template-columns:240px 1fr;gap:1.25rem;align-items:start}
+
+.ctrl-panel{background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;padding:1rem}
+.ctrl-title{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber);margin-bottom:.85rem}
+.ctrl-row{margin-bottom:1rem}
+.ctrl-lbl{display:flex;justify-content:space-between;font-size:clamp(12px,3.2vw,13px);color:var(--text-secondary);margin-bottom:6px}
+.ctrl-lbl span{font-weight:700;color:var(--amber-light)}
+/* bigger touch target for sliders on mobile */
+input[type=range]{width:100%;-webkit-appearance:none;height:5px;border-radius:3px;background:rgba(200,120,10,0.2);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--amber);cursor:pointer;box-shadow:0 0 8px rgba(200,120,10,0.5)}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--amber);border:none;cursor:pointer}
+.dim{opacity:.28;pointer-events:none}
+.al{padding:9px 12px;border-radius:9px;font-size:clamp(11px,2.8vw,12px);line-height:1.55;margin-bottom:6px;display:none}
+.al.show{display:block}
+.al-d{background:rgba(139,26,26,0.25);border:1px solid rgba(200,60,60,0.4);color:#F09090}
+.al-w{background:rgba(180,90,0,0.2);border:1px solid rgba(200,140,0,0.35);color:#F0C060}
+.al-g{background:rgba(46,125,82,0.2);border:1px solid rgba(60,160,100,0.35);color:#70D090}
+
+.vis-area{display:flex;flex-direction:column;gap:.85rem}
+/* Canvas row: side-by-side on desktop, stacked on small mobile */
+.canvas-row{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+.canvas-box{background:#0A0806;border:1px solid var(--card-border);border-radius:12px;overflow:hidden}
+.canvas-box canvas{display:block;width:100%;height:auto}
+.canvas-lbl{text-align:center;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text-secondary);padding:5px 0 7px;text-transform:uppercase}
+.phase-bar{background:var(--card-bg);border:1px solid var(--card-border);border-radius:10px;padding:11px 14px;font-size:clamp(11px,2.8vw,12px);color:var(--text-secondary);min-height:40px;display:flex;align-items:center;gap:9px}
+.pdot{width:7px;height:7px;border-radius:50%;background:var(--amber);flex-shrink:0;animation:pulse 1.5s ease-in-out infinite}
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.mc{background:var(--card-bg);border:1px solid var(--card-border);border-radius:10px;padding:10px 8px}
+.mc .mlb{font-size:clamp(9px,2.2vw,10px);font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--text-secondary);margin-bottom:3px}
+.mc .mvl{font-size:clamp(15px,4vw,18px);font-weight:900}
+.mbar{height:3px;background:rgba(255,255,255,0.08);border-radius:2px;margin-top:5px;overflow:hidden}
+.mbar div{height:100%;border-radius:2px;transition:width .5s ease}
+.btn-run{width:100%;padding:14px;border-radius:12px;border:none;font-size:clamp(13px,3.8vw,15px);font-weight:900;cursor:pointer;font-family:'Noto Sans TC',sans-serif;background:linear-gradient(135deg,var(--amber-dark),var(--amber));color:#0E0A04;box-shadow:0 3px 16px rgba(200,120,10,0.3);min-height:var(--touch-min);touch-action:manipulation}
+.btn-run:active{transform:scale(0.97)}
+.btn-run:disabled{opacity:.6;cursor:default;transform:none}
+.sci-note{background:linear-gradient(135deg,rgba(200,120,10,0.08),rgba(200,120,10,0.03));border:1px solid var(--card-border);border-left:3px solid var(--amber);border-radius:0 10px 10px 0;padding:11px 14px;font-size:clamp(11px,2.8vw,12px);line-height:1.75;color:var(--text-secondary)}
+
+/* ── CARDS ── */
+.cards-section{padding:2.5rem 1.25rem;max-width:1100px;margin:0 auto}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+.sci-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;padding:1.25rem}
+.sci-card .icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:.8rem}
+.sci-card h3{font-size:clamp(.95rem,3.5vw,1rem);font-weight:700;color:var(--text-primary);margin-bottom:.5rem}
+.sci-card p{font-size:clamp(11px,2.8vw,12px);color:var(--text-secondary);line-height:1.7}
+.sci-card .tag{display:inline-block;font-size:10px;font-weight:700;padding:3px 9px;border-radius:8px;margin-top:9px}
+
+/* ── CTA ── */
+.cta-section{padding:4rem 1.25rem;text-align:center;background:radial-gradient(ellipse at 50% 50%,rgba(200,120,10,0.07) 0%,transparent 70%)}
+.cta-section h2{font-size:clamp(1.5rem,5vw,2.5rem);font-weight:900;margin-bottom:.85rem}
+.cta-section p{color:var(--text-secondary);font-size:clamp(12px,3vw,14px);max-width:440px;margin:0 auto 2rem;line-height:1.7}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-p{padding:14px 32px;border-radius:50px;background:linear-gradient(135deg,var(--amber-dark),var(--amber));color:#0E0A04;font-size:clamp(13px,3.5vw,14px);font-weight:900;border:none;cursor:pointer;font-family:'Noto Sans TC',sans-serif;text-decoration:none;display:inline-flex;align-items:center;min-height:var(--touch-min);box-shadow:0 3px 18px rgba(200,120,10,0.35);touch-action:manipulation}
+.btn-s{padding:14px 32px;border-radius:50px;background:transparent;color:var(--amber-light);font-size:clamp(13px,3.5vw,14px);font-weight:700;border:1px solid rgba(200,120,10,0.4);cursor:pointer;font-family:'Noto Sans TC',sans-serif;text-decoration:none;display:inline-flex;align-items:center;min-height:var(--touch-min);touch-action:manipulation}
+footer{text-align:center;padding:1.8rem 1rem;color:rgba(200,160,80,0.3);font-size:11px;border-top:1px solid rgba(200,120,10,0.1);line-height:1.6}
+
+/* ════════════════════════════
+   RESPONSIVE BREAKPOINTS
+   ════════════════════════════ */
+
+/* Tablet (≤900px) */
+@media(max-width:900px){
+  .sim-layout{grid-template-columns:220px 1fr}
+}
+
+/* Large mobile / small tablet (≤700px) */
+@media(max-width:700px){
+  .sim-layout{grid-template-columns:1fr}
+  .ai-inner{grid-template-columns:1fr}
+  .ai-stats{grid-template-columns:1fr 1fr}
+  .metrics-grid{grid-template-columns:1fr 1fr;gap:8px}
+  /* Canvas row stays side-by-side but use taller canvas */
+  .canvas-row{grid-template-columns:1fr 1fr;gap:8px}
+}
+
+/* Small mobile (≤480px) */
+@media(max-width:480px){
+  .hero{padding:3.5rem 1rem 2.5rem}
+  .ai-section{padding:2rem 1rem}
+  .sim-section{padding:2rem 1rem}
+  .cards-section{padding:2rem 1rem}
+  .cta-section{padding:3rem 1rem}
+  /* Stack canvases vertically on very small screens */
+  .canvas-row{grid-template-columns:1fr}
+  /* Full width tabs */
+  .stab{padding:12px 10px}
+  /* 2-col metrics */
+  .metrics-grid{grid-template-columns:1fr 1fr}
+  .ai-inner{grid-template-columns:1fr}
+  .cards-grid{grid-template-columns:1fr}
+  /* CTA buttons full width */
+  .cta-btns{flex-direction:column;align-items:center}
+  .btn-p,.btn-s{width:100%;justify-content:center;max-width:320px}
+}
+
+/* Extra small (≤360px) */
+@media(max-width:360px){
+  .hero h1{font-size:1.75rem}
+  .pills .pill:nth-child(n+3){display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="orb"></div><div class="orb"></div>
+  <div class="ai-badge"><div class="ai-dot"></div>AI × Food Science Lab</div>
+  <h1>你知道麵包<br>為什麼會膨脹嗎？</h1>
+  <p class="hero-sub">結合 AI 即時運算與食品科學原理，調整參數觀察紅豆麵包從生麵團到金黃出爐的完整科學過程。</p>
+  <div class="pills">
+    <span class="pill pill-b">🤖 AI 即時預測</span>
+    <span class="pill pill-a">🍞 擬真 3D 動畫</span>
+    <span class="pill pill-g">🔬 食品科學原理</span>
+    <span class="pill pill-b">📊 梅納反應模擬</span>
+  </div>
+  <div class="hero-cv-wrap">
+    <canvas id="heroC" width="200" height="160"></canvas>
+    <div class="cv-label">AI 動態預覽</div>
+  </div>
+  <a href="#simulator" class="btn-start">▶ 開始 AI 科學實驗</a>
+  <div class="scroll-hint">往下探索</div>
+</section>
+
+<!-- AI BANNER -->
+<section class="ai-section">
+  <div class="ai-inner">
+    <div class="ai-text">
+      <h2>為什麼用 <span>AI</span> 學食品科學？</h2>
+      <p>傳統食品科學需要在實驗室花數小時進行實驗。AI 讓你在 3 秒內模擬數百個實驗條件，即時看到科學規律。</p>
+      <div class="ai-feats">
+        <div class="ai-feat"><div class="ai-feat-icon">🧠</div><div class="ai-feat-txt"><strong>即時參數預測</strong>AI 即時計算 CO₂ 產量、體積膨脹率與色澤指數。</div></div>
+        <div class="ai-feat"><div class="ai-feat-icon">🎨</div><div class="ai-feat-txt"><strong>擬真視覺模擬</strong>Canvas 引擎呈現蛋液光澤、氣孔、紅豆餡的真實視覺效果。</div></div>
+        <div class="ai-feat"><div class="ai-feat-icon">⚗️</div><div class="ai-feat-txt"><strong>錯誤學習機制</strong>故意玩錯，AI 告訴你酵母為什麼死了。</div></div>
+      </div>
+    </div>
+    <div class="ai-stats">
+      <div class="ai-stat"><div class="snum">∞</div><div class="slb">可模擬組合數</div></div>
+      <div class="ai-stat"><div class="snum">0s</div><div class="slb">實驗等待時間</div></div>
+      <div class="ai-stat"><div class="snum">5+</div><div class="slb">科學指標即時呈現</div></div>
+      <div class="ai-stat"><div class="snum">2D</div><div class="slb">擬真 Canvas 渲染</div></div>
+      <div class="ai-stat ai-stat-wide"><div class="snum" style="font-size:clamp(.9rem,3.5vw,1.1rem)">食品科學 × AI × 互動體驗</div><div class="slb">這就是食科系的未來學習方式</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SIMULATOR -->
+<section class="sim-section" id="simulator">
+  <div class="sec-hdr">
+    <h2>🍞 AI 互動模擬器</h2>
+    <p>拉動滑桿，AI 即時渲染麵包外觀與剖面。</p>
+  </div>
+  <div class="stage-tabs">
+    <button class="stab on" id="tab0" onclick="G.switchTab(0)">① 發酵階段</button>
+    <button class="stab" id="tab1" onclick="G.switchTab(1)">② 烘焙階段</button>
+  </div>
+  <div class="sim-layout">
+    <!-- controls -->
+    <div>
+      <div class="ctrl-panel" id="pF">
+        <div class="ctrl-title">發酵參數</div>
+        <div class="ctrl-row"><div class="ctrl-lbl">酵母添加量 <span><span id="vy">1.5</span>%</span></div><input type="range" id="yeast" min="0.5" max="3" step="0.1" value="1.5" oninput="G.sync()"></div>
+        <div class="ctrl-row"><div class="ctrl-lbl">發酵溫度 <span><span id="vt">28</span>°C</span></div><input type="range" id="ftemp" min="10" max="50" step="1" value="28" oninput="G.sync()"></div>
+        <div class="ctrl-row"><div class="ctrl-lbl">發酵時間 <span><span id="vf">60</span> 分</span></div><input type="range" id="ftime" min="15" max="120" step="5" value="60" oninput="G.sync()"></div>
+        <div class="ctrl-row"><div class="ctrl-lbl">糖添加量 <span><span id="vs">3.0</span>%</span></div><input type="range" id="sugar" min="0" max="12" step="0.5" value="3" oninput="G.sync()"></div>
+      </div>
+      <div class="ctrl-panel dim" id="pB" style="margin-top:10px">
+        <div class="ctrl-title">烘焙參數</div>
+        <div class="ctrl-row"><div class="ctrl-lbl">烤箱溫度 <span><span id="vbt">190</span>°C</span></div><input type="range" id="btemp" min="140" max="260" step="5" value="190" oninput="G.sync()"></div>
+        <div class="ctrl-row"><div class="ctrl-lbl">烘烤時間 <span><span id="vbf">25</span> 分</span></div><input type="range" id="btime" min="10" max="50" step="1" value="25" oninput="G.sync()"></div>
+        <div class="ctrl-row"><div class="ctrl-lbl">蒸氣噴射 <span id="vst">開</span></div><input type="range" id="steam" min="0" max="1" step="1" value="1" oninput="G.sync()"></div>
+        <div class="ctrl-row"><div class="ctrl-lbl">蛋液塗抹 <span id="veg">有</span></div><input type="range" id="egg" min="0" max="1" step="1" value="1" oninput="G.sync()"></div>
+      </div>
+      <div style="margin-top:10px">
+        <div class="al al-d" id="aOH">⚠ 酵母過熱死亡！>42°C 蛋白質變性，CO₂ 停止。</div>
+        <div class="al al-w" id="aLT">❄ 溫度過低！&lt;18°C 代謝緩慢，無法發酵。</div>
+        <div class="al al-w" id="aSH">⚠ 糖濃度過高！滲透壓抑制酵母活性。</div>
+        <div class="al al-d" id="aBN">🔥 烤焦！梅納反應失控，產生苦味。</div>
+        <div class="al al-w" id="aUB">⚠ 烘焙不足！澱粉未完全糊化。</div>
+        <div class="al al-g" id="aGF">✓ 發酵條件完美！酵母活性最佳。</div>
+        <div class="al al-g" id="aGB">✓ 烘焙完美！金黃色澤。</div>
+      </div>
+    </div>
+    <!-- visuals -->
+    <div class="vis-area">
+      <div class="canvas-row">
+        <div class="canvas-box"><canvas id="extC" width="300" height="230"></canvas><div class="canvas-lbl">外觀視圖</div></div>
+        <div class="canvas-box"><canvas id="csC" width="300" height="230"></canvas><div class="canvas-lbl">剖面圖</div></div>
+      </div>
+      <div class="phase-bar"><div class="pdot" id="pdot"></div><span id="phl">請調整參數後按下方按鈕開始模擬</span></div>
+      <div class="metrics-grid">
+        <div class="mc"><div class="mlb">體積膨脹</div><div class="mvl" id="mV" style="color:#378ADD">—</div><div class="mbar"><div id="bV" style="background:#378ADD;width:0%"></div></div></div>
+        <div class="mc"><div class="mlb">CO₂產量</div><div class="mvl" id="mC" style="color:#1D9E75">—</div><div class="mbar"><div id="bC" style="background:#1D9E75;width:0%"></div></div></div>
+        <div class="mc"><div class="mlb">色澤指數</div><div class="mvl" id="mK" style="color:#C8860A">—</div><div class="mbar"><div id="bK" style="background:#C8860A;width:0%"></div></div></div>
+        <div class="mc"><div class="mlb">蛋液光澤</div><div class="mvl" id="mG" style="color:#D4537E">—</div><div class="mbar"><div id="bG" style="background:#D4537E;width:0%"></div></div></div>
+      </div>
+      <button class="btn-run" id="runBtn" onclick="G.runSim()">▶ 開始 AI 模擬</button>
+      <div class="sci-note" id="noteBox">📖 調整參數後按「開始 AI 模擬」，下方顯示食品科學原理說明。</div>
+    </div>
+  </div>
+</section>
+
+<!-- CARDS -->
+<section class="cards-section">
+  <div class="sec-hdr"><h2>食科系在研究什麼？</h2><p>麵包只是冰山一角。食品科學結合化學、生物、工程與 AI。</p></div>
+  <div class="cards-grid">
+    <div class="sci-card"><div class="icon" style="background:rgba(200,120,10,0.15)">🧬</div><h3>發酵科學</h3><p>酵母菌如何把糖轉化成 CO₂ 與酒精？溫度、pH、糖濃度如何影響代謝速率？食品微生物學的核心。</p><span class="tag" style="background:rgba(200,120,10,0.15);color:#F0C050">微生物學</span></div>
+    <div class="sci-card"><div class="icon" style="background:rgba(139,26,26,0.2)">🔥</div><h3>梅納反應</h3><p>140°C 以上，胺基酸與還原糖發生非酵素性褐變，生成數百種香氣化合物——這就是麵包香的秘密。</p><span class="tag" style="background:rgba(139,26,26,0.18);color:#F09090">食品化學</span></div>
+    <div class="sci-card"><div class="icon" style="background:rgba(46,125,82,0.18)">⚗️</div><h3>流變學</h3><p>麵團為什麼有彈性？麵筋蛋白質（gluten）網絡如何捕捉 CO₂ 氣泡？黏彈性材料科學的核心。</p><span class="tag" style="background:rgba(46,125,82,0.15);color:#70D090">食品物理</span></div>
+    <div class="sci-card"><div class="icon" style="background:rgba(60,80,220,0.18)">🤖</div><h3>AI × 食品科學</h3><p>機器學習預測最佳配方、影像辨識檢測食品品質、大數據分析消費趨勢——AI 正在改變食品產業。</p><span class="tag" style="background:rgba(60,80,220,0.15);color:#90B8FF">人工智慧</span></div>
+    <div class="sci-card"><div class="icon" style="background:rgba(180,60,120,0.18)">🏭</div><h3>食品加工</h3><p>超音波殺菌、高壓均質、冷凍乾燥——現代食品加工技術的研發與優化，從實驗室到工廠量產。</p><span class="tag" style="background:rgba(180,60,120,0.15);color:#F090C0">加工技術</span></div>
+    <div class="sci-card"><div class="icon" style="background:rgba(140,100,20,0.2)">💼</div><h3>職涯出路</h3><p>研發工程師、品管專員、AI 食品分析師、法規顧問——台灣食品產業年產值超過 1.5 兆元。</p><span class="tag" style="background:rgba(140,100,20,0.18);color:#E0C060">產業應用</span></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>對 AI 食品科學感興趣嗎？</h2>
+  <p>東海大學食品科學系提供完整學術訓練，從基礎科學到 AI 應用，培育下一代食品科技人才。</p>
+  <div class="cta-btns">
+    <a href="https://foodsci.thu.edu.tw" class="btn-p" target="_blank">了解食科系課程</a>
+    <a href="#simulator" class="btn-s">再玩一次模擬器</a>
+  </div>
+</section>
+<footer>© 東海大學食品科學系　|　AI 互動教學示範頁面<br>foodsci.thu.edu.tw</footer>
+
+<script>
+var G=(function(){
+  var curTab=0,rafId=null;
+
+  function switchTab(t){
+    curTab=t;
+    document.getElementById('tab0').className=t===0?'stab on':'stab';
+    document.getElementById('tab1').className=t===1?'stab on':'stab';
+    document.getElementById('pF').className=t===0?'ctrl-panel':'ctrl-panel dim';
+    document.getElementById('pB').className=t===1?'ctrl-panel':'ctrl-panel dim';
+    sync();
+  }
+
+  function sync(){
+    var y=parseFloat(document.getElementById('yeast').value);
+    var ft=parseInt(document.getElementById('ftemp').value);
+    var sg=parseFloat(document.getElementById('sugar').value);
+    var bt=parseInt(document.getElementById('btemp').value);
+    var bf=parseInt(document.getElementById('btime').value);
+    document.getElementById('vy').textContent=y.toFixed(1);
+    document.getElementById('vt').textContent=ft;
+    document.getElementById('vf').textContent=document.getElementById('ftime').value;
+    document.getElementById('vs').textContent=sg.toFixed(1);
+    document.getElementById('vbt').textContent=bt;
+    document.getElementById('vbf').textContent=bf;
+    document.getElementById('vst').textContent=document.getElementById('steam').value==='1'?'開':'關';
+    document.getElementById('veg').textContent=document.getElementById('egg').value==='1'?'有':'無';
+    function sa(id,v){var el=document.getElementById(id);el.className=el.className.replace(' show','');if(v)el.className+=' show';}
+    sa('aOH',ft>42);sa('aLT',ft<18);sa('aSH',sg>9);
+    sa('aBN',curTab===1&&(bt>230||bf>42));
+    sa('aUB',curTab===1&&bt<165&&!(bt>230||bf>42));
+    sa('aGF',curTab===0&&ft>=24&&ft<=36&&y>=0.8&&sg<=8);
+    sa('aGB',curTab===1&&bt>=175&&bt<=220&&bf>=20&&bf<=38&&!(bt>230||bf>42));
+  }
+
+  function lerp(a,b,t){return a+(b-a)*t;}
+  function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+  function lerpRGB(c1,c2,t){return[Math.round(lerp(c1[0],c2[0],t)),Math.round(lerp(c1[1],c2[1],t)),Math.round(lerp(c1[2],c2[2],t))];}
+  function rgb(c){return'rgb('+c[0]+','+c[1]+','+c[2]+')';}
+  function rgba(c,a){return'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')';}
+
+  var STOPS=[
+    {t:[248,242,220],m:[237,224,181],b:[225,208,144]},
+    {t:[237,207,106],m:[212,160,48], b:[184,134,26]},
+    {t:[200,120,10], m:[160,92,10],  b:[136,74,8]},
+    {t:[139,58,8],   m:[106,44,6],   b:[78,32,4]},
+    {t:[58,18,6],    m:[40,12,4],    b:[28,10,2]}
+  ];
+  function getSkin(cs,burnt){
+    if(burnt)return{t:[28,10,2],m:[58,18,6],b:[20,8,2]};
+    var idx=clamp(cs*4,0,3.999),lo=Math.floor(idx),hi=lo+1,f=idx-lo;
+    return{t:lerpRGB(STOPS[lo].t,STOPS[hi].t,f),m:lerpRGB(STOPS[lo].m,STOPS[hi].m,f),b:lerpRGB(STOPS[lo].b,STOPS[hi].b,f)};
+  }
+
+  function breadShape(ctx,cx,cy,rw,rh){
+    ctx.beginPath();
+    ctx.moveTo(cx-rw,cy);
+    ctx.bezierCurveTo(cx-rw,cy-rh*0.9,cx-rw*0.38,cy-rh*1.2,cx,cy-rh*1.15);
+    ctx.bezierCurveTo(cx+rw*0.38,cy-rh*1.2,cx+rw,cy-rh*0.9,cx+rw,cy);
+    ctx.bezierCurveTo(cx+rw,cy+rh*0.55,cx+rw*0.5,cy+rh*0.76,cx,cy+rh*0.78);
+    ctx.bezierCurveTo(cx-rw*0.5,cy+rh*0.76,cx-rw,cy+rh*0.55,cx-rw,cy);
+    ctx.closePath();
+  }
+
+  /* 核心：安全半徑計算，永遠不超出 canvas */
+  function safeR(W,H,vol,p){
+    var maxRW=W*0.36, maxRH=H*0.30;
+    var base=0.52;
+    var scl=lerp(1,Math.min(vol,2.2),p);
+    return{rw:Math.min(maxRW*base*scl,maxRW), rh:Math.min(maxRH*base*scl,maxRH)};
+  }
+
+  function drawExt(cvId,vol,co2,cs,p,bake,burnt,steam,egg){
+    var cv=document.getElementById(cvId);if(!cv)return;
+    var ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+    ctx.clearRect(0,0,W,H);
+    var bg=ctx.createRadialGradient(W/2,H*0.75,10,W/2,H*0.45,H*0.65);
+    bg.addColorStop(0,'#2a1e0e');bg.addColorStop(1,'#0e0a04');
+    ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+    var cx=W/2,cy=H*0.54;
+    var r=safeR(W,H,vol,p),rw=r.rw,rh=r.rh;
+    var sk=getSkin(cs*p,burnt&&p>0.7);
+    // shadow
+    ctx.fillStyle='rgba(0,0,0,0.3)';
+    ctx.beginPath();ctx.ellipse(cx,cy+rh*0.76,rw*0.78,rh*0.13,0,0,Math.PI*2);ctx.fill();
+    // main
+    var mg=ctx.createRadialGradient(cx-rw*0.17,cy-rh*0.3,rh*0.04,cx+rw*0.08,cy+rh*0.08,rw*1.1);
+    mg.addColorStop(0,rgb(sk.t));mg.addColorStop(0.42,rgb(sk.m));mg.addColorStop(1,rgb(sk.b));
+    breadShape(ctx,cx,cy,rw,rh);ctx.fillStyle=mg;ctx.fill();
+    // shadows L/R/B
+    var sl=ctx.createLinearGradient(cx-rw,cy,cx-rw*0.5,cy);
+    sl.addColorStop(0,'rgba(0,0,0,0.24)');sl.addColorStop(1,'rgba(0,0,0,0)');
+    breadShape(ctx,cx,cy,rw,rh);ctx.fillStyle=sl;ctx.fill();
+    var sr=ctx.createLinearGradient(cx+rw*0.5,cy,cx+rw,cy);
+    sr.addColorStop(0,'rgba(0,0,0,0)');sr.addColorStop(1,'rgba(0,0,0,0.24)');
+    breadShape(ctx,cx,cy,rw,rh);ctx.fillStyle=sr;ctx.fill();
+    var sb=ctx.createLinearGradient(cx,cy,cx,cy+rh*0.8);
+    sb.addColorStop(0,'rgba(0,0,0,0)');sb.addColorStop(1,'rgba(0,0,0,0.35)');
+    breadShape(ctx,cx,cy,rw,rh);ctx.fillStyle=sb;ctx.fill();
+    // maillard
+    if(bake&&p>0.3){
+      var mOp=clamp((cs*p-0.04)*1.3,0,0.5);
+      if(mOp>0.01){
+        var sd=42;function rnd(){sd=(sd*1664525+1013904223)&0xffffffff;return((sd>>>0)/4294967296);}
+        ctx.save();breadShape(ctx,cx,cy,rw,rh);ctx.clip();
+        for(var i=0;i<14;i++){
+          var bx=cx+(rnd()-0.5)*rw*1.4,by=cy+(rnd()-0.58)*rh*1.3;
+          if(Math.pow((bx-cx)/rw,2)+Math.pow((by-cy)/rh,2)>0.75)continue;
+          var br=(2+rnd()*6);
+          var sg2=ctx.createRadialGradient(bx,by,0,bx,by,br*1.5);
+          sg2.addColorStop(0,rgba(sk.b,mOp*0.6));sg2.addColorStop(1,'rgba(0,0,0,0)');
+          ctx.fillStyle=sg2;ctx.beginPath();ctx.arc(bx,by,br*1.5,0,Math.PI*2);ctx.fill();
+        }
+        ctx.restore();
+      }
+    }
+    // egg glaze
+    if(bake&&egg){
+      var eg=clamp(cs*p*1.7,0,1);
+      if(eg>0.02){
+        ctx.save();breadShape(ctx,cx,cy,rw,rh);ctx.clip();
+        var ef=ctx.createRadialGradient(cx,cy-rh*0.1,rh*0.04,cx,cy,rw*0.95);
+        ef.addColorStop(0,'rgba(220,178,62,'+eg*0.23+')');ef.addColorStop(0.55,'rgba(190,142,32,'+eg*0.14+')');ef.addColorStop(1,'rgba(140,90,10,'+eg*0.07+')');
+        breadShape(ctx,cx,cy,rw,rh);ctx.fillStyle=ef;ctx.fill();
+        var hx=cx-rw*0.25,hy=cy-rh*0.58;
+        var s1=ctx.createRadialGradient(hx,hy,0,hx,hy,rw*0.3);
+        s1.addColorStop(0,'rgba(255,254,225,'+eg*0.9+')');s1.addColorStop(0.15,'rgba(255,242,168,'+eg*0.54+')');s1.addColorStop(0.45,'rgba(230,196,82,'+eg*0.17+')');s1.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.fillStyle=s1;ctx.beginPath();ctx.arc(hx,hy,rw*0.3,0,Math.PI*2);ctx.fill();
+        var s2=ctx.createRadialGradient(cx+rw*0.27,cy-rh*0.32,0,cx+rw*0.27,cy-rh*0.32,rw*0.16);
+        s2.addColorStop(0,'rgba(255,250,210,'+eg*0.5+')');s2.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.fillStyle=s2;ctx.beginPath();ctx.arc(cx+rw*0.27,cy-rh*0.32,rw*0.16,0,Math.PI*2);ctx.fill();
+        var al=ctx.createLinearGradient(cx,cy-rh*1.12,cx,cy-rh*0.46);
+        al.addColorStop(0,'rgba(255,252,230,'+eg*0.3+')');al.addColorStop(0.45,'rgba(255,240,180,'+eg*0.12+')');al.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.fillStyle=al;ctx.beginPath();ctx.ellipse(cx,cy-rh*0.65,rw*0.6,rh*0.4,0,0,Math.PI*2);ctx.fill();
+        ctx.restore();
+      }
+    }
+    // navel
+    if(p>0.22){
+      var nOp=clamp((p-0.22)*1.4,0,0.8),nR=rw*0.09,nY=cy-rh*1.03*clamp(p*0.95,0,1);
+      ctx.save();breadShape(ctx,cx,cy,rw,rh);ctx.clip();
+      var ng=ctx.createRadialGradient(cx,nY,0,cx,nY,nR*1.2);
+      ng.addColorStop(0,rgba(sk.b,nOp*0.85));ng.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=ng;ctx.beginPath();ctx.ellipse(cx,nY,nR,nR*0.55,0,0,Math.PI*2);ctx.fill();
+      for(var ni=0;ni<5;ni++){var na=ni*(Math.PI*2/5)-0.3;ctx.strokeStyle=rgba(sk.b,nOp*0.38);ctx.lineWidth=0.6;ctx.beginPath();ctx.moveTo(cx+Math.cos(na)*nR*0.62,nY+Math.sin(na)*nR*0.38);ctx.lineTo(cx+Math.cos(na)*nR*1.95,nY+Math.sin(na)*nR*1.1);ctx.stroke();}
+      ctx.restore();
+    }
+    // cracks
+    if(bake&&p>0.48){
+      var cOp=clamp((p-0.48)*1.8,0,0.84)*clamp(cs*1.5,0,1);
+      ctx.save();breadShape(ctx,cx,cy,rw,rh);ctx.clip();ctx.lineCap='round';
+      ctx.strokeStyle=rgba(sk.b,cOp*0.72);ctx.lineWidth=1.1;
+      ctx.beginPath();ctx.moveTo(cx-7,cy-rh*0.87);ctx.bezierCurveTo(cx+3,cy-rh*0.67,cx+12,cy-rh*0.63,cx+17,cy-rh*0.76);ctx.stroke();
+      ctx.strokeStyle=rgba(sk.b,cOp*0.5);ctx.lineWidth=0.85;
+      ctx.beginPath();ctx.moveTo(cx+19,cy-rh*0.85);ctx.bezierCurveTo(cx+27,cy-rh*0.63,cx+20,cy-rh*0.48,cx+14,cy-rh*0.42);ctx.stroke();
+      ctx.restore();
+    }
+    // burnt
+    if(burnt&&p>0.68){
+      ctx.save();breadShape(ctx,cx,cy,rw,rh);ctx.clip();
+      var bop=clamp((p-0.68)*2.2,0,0.8);
+      var bg3=ctx.createRadialGradient(cx+rw*0.16,cy-rh*0.76,0,cx+rw*0.16,cy-rh*0.76,rw*0.27);
+      bg3.addColorStop(0,'rgba(8,2,0,'+bop*0.74+')');bg3.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=bg3;ctx.beginPath();ctx.arc(cx+rw*0.16,cy-rh*0.76,rw*0.27,0,Math.PI*2);ctx.fill();
+      ctx.restore();
+    }
+    // steam
+    if(bake&&steam&&p>0.26){
+      var sop=clamp((p-0.26)*0.52,0,0.4);
+      for(var j=0;j<3;j++){
+        var sx=cx-20+j*20,sy=cy-rh*1.16;
+        ctx.save();ctx.globalAlpha=sop*(0.45+0.12*j);ctx.strokeStyle='#b8d8e2';ctx.lineWidth=2.0;ctx.lineCap='round';
+        ctx.beginPath();ctx.moveTo(sx,sy);ctx.bezierCurveTo(sx+7,sy-11,sx-4,sy-21,sx+3,sy-31);ctx.bezierCurveTo(sx+10,sy-41,sx-2,sy-50,sx,sy-59);ctx.stroke();ctx.restore();
+      }
+    }
+    breadShape(ctx,cx,cy,rw,rh);ctx.strokeStyle=rgba(sk.b,0.48);ctx.lineWidth=0.7;ctx.stroke();
+  }
+
+  function drawCS(vol,co2,cs,p,bake,burnt){
+    var cv=document.getElementById('csC');if(!cv)return;
+    var ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+    ctx.clearRect(0,0,W,H);
+    var bg=ctx.createRadialGradient(W/2,H*0.75,10,W/2,H*0.45,H*0.6);
+    bg.addColorStop(0,'#2e2416');bg.addColorStop(1,'#100c06');
+    ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+    var cx=W/2,cy=H*0.52;
+    var r=safeR(W,H,vol,p),rw=r.rw,rh=r.rh;
+    var sk=getSkin(cs*p,burnt&&p>0.7);
+    var crustT=lerp(3,bake?clamp(cs*p*13+4,5,12):4,p);
+    var cLight=bake?lerpRGB([248,240,210],[242,218,158],clamp(cs*p*1.2,0,1)):[248,242,220];
+    var cMid=bake?lerpRGB([240,228,188],[228,196,120],clamp(cs*p*1.2,0,1)):[238,228,200];
+    var cg=ctx.createRadialGradient(cx,cy-rh*0.07,rh*0.03,cx,cy,rw*1.0);
+    cg.addColorStop(0,rgb(cLight));cg.addColorStop(0.6,rgb(cMid));cg.addColorStop(1,rgb(sk.m));
+    breadShape(ctx,cx,cy,rw,rh);ctx.fillStyle=cg;ctx.fill();
+    breadShape(ctx,cx,cy,rw,rh);ctx.strokeStyle=rgb(sk.m);ctx.lineWidth=crustT*2;ctx.stroke();
+    var cRing=ctx.createRadialGradient(cx,cy,rw*0.54,cx,cy,rw*1.08);
+    cRing.addColorStop(0,'rgba(0,0,0,0)');cRing.addColorStop(0.66,'rgba(0,0,0,0)');cRing.addColorStop(0.83,rgba(sk.b,0.5));cRing.addColorStop(1,rgba(sk.b,0.8));
+    breadShape(ctx,cx,cy,rw,rh);ctx.fillStyle=cRing;ctx.fill();
+    // pores
+    ctx.save();breadShape(ctx,cx,cy,rw,rh);ctx.clip();
+    var sd4=137;function rnd4(){sd4=(sd4*1664525+1013904223)&0xffffffff;return((sd4>>>0)/4294967296);}
+    var np=Math.floor(co2*p*55+5),rbRwC=rw*0.37,rbRhC=rh*0.43;
+    for(var i=0;i<np;i++){
+      var px4=cx+(rnd4()-0.5)*rw*1.62,py4=cy+(rnd4()-0.5)*rh*1.5;
+      if(Math.pow((px4-cx)/rw,2)+Math.pow((py4-cy)/rh,2)>0.72)continue;
+      if(Math.pow((px4-cx)/rbRwC,2)+Math.pow((py4-cy)/rbRhC,2)<1.05)continue;
+      var pr4=1.5+rnd4()*5.2,str=0.45+rnd4()*0.75,pOp=bake?(0.16+rnd4()*0.19):(0.09+rnd4()*0.1);
+      ctx.save();ctx.translate(px4,py4);ctx.rotate(rnd4()*Math.PI);
+      var pg=ctx.createRadialGradient(0,0,0,0,0,pr4*1.2);
+      pg.addColorStop(0,'rgba(0,0,0,'+pOp*1.4+')');pg.addColorStop(0.5,'rgba(0,0,0,'+pOp*0.6+')');pg.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=pg;ctx.beginPath();ctx.ellipse(0,0,pr4,pr4*str,0,0,Math.PI*2);ctx.fill();
+      ctx.restore();
+    }
+    ctx.restore();
+    // red bean
+    var rbRw2=rw*lerp(0.22,0.35,p),rbRh2=rh*lerp(0.24,0.4,p);
+    ctx.save();breadShape(ctx,cx,cy,rw,rh);ctx.clip();
+    var rbg=ctx.createRadialGradient(cx-rbRw2*0.13,cy-rbRh2*0.17,rbRh2*0.03,cx,cy,rbRw2*1.1);
+    rbg.addColorStop(0,'#8B2A2A');rbg.addColorStop(0.44,'#6B1E1E');rbg.addColorStop(0.8,'#4A1010');rbg.addColorStop(1,'#380C0C');
+    ctx.fillStyle=rbg;ctx.beginPath();ctx.ellipse(cx,cy,rbRw2,rbRh2,0,0,Math.PI*2);ctx.fill();
+    var rbt=ctx.createRadialGradient(cx-rbRw2*0.27,cy-rbRh2*0.27,0,cx-rbRw2*0.27,cy-rbRh2*0.27,rbRw2*0.75);
+    rbt.addColorStop(0,'rgba(165,62,62,0.28)');rbt.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=rbt;ctx.beginPath();ctx.ellipse(cx,cy,rbRw2,rbRh2,0,0,Math.PI*2);ctx.fill();
+    if(p>0.16){
+      var bsd2=33;function brnd2(){bsd2=(bsd2*1664525+1013904223)&0xffffffff;return((bsd2>>>0)/4294967296);}
+      var bOp=Math.min(1,(p-0.16)*1.5);
+      for(var bi=0;bi<9;bi++){
+        var bxc=cx+(brnd2()-0.5)*rbRw2*1.5,byc=cy+(brnd2()-0.5)*rbRh2*1.4;
+        if(Math.pow((bxc-cx)/rbRw2,2)+Math.pow((byc-cy)/rbRh2,2)>0.88)continue;
+        var br5=2.5+brnd2()*3.6,bcol=brnd2()>0.45?[52,10,8]:[80,22,14];
+        var bbg=ctx.createRadialGradient(bxc-br5*0.2,byc-br5*0.24,0,bxc,byc,br5*1.1);
+        bbg.addColorStop(0,rgba([165,52,46],bOp*0.62));bbg.addColorStop(0.35,rgba(bcol,bOp));bbg.addColorStop(1,rgba([25,5,4],bOp*0.84));
+        ctx.fillStyle=bbg;ctx.save();ctx.translate(bxc,byc);ctx.scale(1,0.74);
+        ctx.beginPath();ctx.arc(0,0,br5,0,Math.PI*2);ctx.fill();
+        ctx.strokeStyle='rgba(20,5,3,'+(bOp*0.5)+')';ctx.lineWidth=0.4;
+        ctx.beginPath();ctx.moveTo(-br5*0.46,0);ctx.lineTo(br5*0.46,0);ctx.stroke();
+        ctx.restore();
+      }
+    }
+    ctx.strokeStyle='rgba(80,18,10,0.34)';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.ellipse(cx,cy,rbRw2,rbRh2,0,0,Math.PI*2);ctx.stroke();
+    ctx.restore();
+    breadShape(ctx,cx,cy,rw,rh);ctx.strokeStyle=rgba(sk.b,0.78);ctx.lineWidth=1.2;ctx.stroke();
+    // labels
+    if(p>0.52){
+      var lop=clamp((p-0.52)*2.2,0,1);
+      ctx.globalAlpha=lop;ctx.font='bold 10px sans-serif';ctx.setLineDash([2,2]);
+      ctx.strokeStyle='rgba(165,62,42,0.55)';ctx.lineWidth=0.8;
+      ctx.beginPath();ctx.moveTo(cx+rbRw2*0.74,cy-rbRh2*0.16);ctx.lineTo(cx+rw*0.85,cy-rh*0.43);ctx.stroke();
+      ctx.setLineDash([]);ctx.fillStyle='rgba(200,100,60,0.9)';ctx.fillText('紅豆餡',cx+rw*0.87,cy-rh*0.46);
+      ctx.setLineDash([2,2]);ctx.strokeStyle='rgba(158,118,48,0.5)';
+      ctx.beginPath();ctx.moveTo(cx-rw*0.53,cy-rh*0.37);ctx.lineTo(cx-rw*0.8,cy-rh*0.62);ctx.stroke();
+      ctx.setLineDash([]);ctx.fillStyle='rgba(190,148,78,0.9)';ctx.fillText('麵包心',cx-rw*1.05,cy-rh*0.65);
+      if(bake){
+        ctx.setLineDash([2,2]);ctx.strokeStyle='rgba(138,88,18,0.46)';
+        ctx.beginPath();ctx.moveTo(cx+rw*0.8,cy+rh*0.07);ctx.lineTo(cx+rw*1.0,cy+rh*0.3);ctx.stroke();
+        ctx.setLineDash([]);ctx.fillStyle='rgba(168,108,38,0.9)';ctx.fillText('外殼',cx+rw*1.02,cy+rh*0.33);
+      }
+      ctx.globalAlpha=1;
+    }
+  }
+
+  function calcP(){
+    var y=parseFloat(document.getElementById('yeast').value);
+    var ft=parseInt(document.getElementById('ftemp').value);
+    var ff=parseInt(document.getElementById('ftime').value);
+    var sg=parseFloat(document.getElementById('sugar').value);
+    var bt=parseInt(document.getElementById('btemp').value);
+    var bf=parseInt(document.getElementById('btime').value);
+    var st=document.getElementById('steam').value==='1';
+    var eg=document.getElementById('egg').value==='1';
+    var tf=ft<18?0.06:ft>42?0:ft<24?0.22+(ft-18)*0.06:ft<=36?0.58+(ft-24)*0.032:Math.max(0.02,1-(ft-36)*0.1);
+    var sf=sg<1?0.52:sg<=6?1:sg<=9?1-(sg-6)*0.1:0.22;
+    var co2=tf*sf*Math.min(1,y/1.5)*Math.min(1,ff/90);
+    var vol=1+co2*1.85;
+    var cs=0,bt2=bt,bf2=bf;
+    if(bt2>=140){var mr=Math.min(1,(bt2-140)/85)*Math.min(1,bf2/28);var ca=Math.min(1,(bt2-158)/65)*Math.min(1,bf2/22);cs=mr*0.55+ca*0.45;}
+    var burnt=bt2>230||bf2>42;if(burnt)cs=Math.min(1,cs+0.38);
+    return{co2:co2,vol:vol,cs:cs,burnt:burnt,steam:st,egg:eg};
+  }
+
+  function updM(p,pr,bake){
+    document.getElementById('mV').textContent=(1+(pr.vol-1)*p).toFixed(2)+'x';
+    document.getElementById('bV').style.width=Math.min(100,(pr.vol-1)/1.8*100*p).toFixed(0)+'%';
+    document.getElementById('mC').textContent=Math.round(pr.co2*p*100)+'%';
+    document.getElementById('bC').style.width=Math.round(pr.co2*p*100)+'%';
+    document.getElementById('mK').textContent=Math.round(pr.cs*p*100)+'/100';
+    document.getElementById('bK').style.width=Math.round(pr.cs*p*100)+'%';
+    var gl=bake&&pr.egg?Math.min(100,Math.round(pr.cs*p*162)):0;
+    document.getElementById('mG').textContent=gl+'/100';
+    document.getElementById('bG').style.width=gl+'%';
+  }
+
+  function getNote(pr,bake){
+    var ft=parseInt(document.getElementById('ftemp').value),bt=parseInt(document.getElementById('btemp').value);
+    if(!bake){
+      if(ft>42)return'⚠ AI 偵測：酵母 >42°C 時酶蛋白熱變性，CO₂ 產生完全停止，麵筋網絡無法被撐開。';
+      if(ft<18)return'❄ AI 偵測：低溫使酵母代謝速率大幅下降（Q₁₀ 定律），CO₂ 產量趨近於零。';
+      if(pr.co2>0.65)return'✓ AI 最佳解：C₆H₁₂O₆ → 2CO₂ + 2C₂H₅OH，CO₂ 被麵筋蛋白質網絡包覆形成氣泡，麵團膨脹至典型扁圓外形。';
+      return'📖 AI 建議：溫度 26-34°C、酵母量 1-2%，可達最佳發酵效果。糖 >9% 將因高滲透壓抑制酵母活性。';
+    }else{
+      if(pr.burnt)return'⚠ AI 警告：梅納反應失控，胺基酸大量碳化，丙烯醯胺（acrylamide）含量顯著上升，食品安全疑慮。';
+      if(pr.egg&&bt>=175)return'✓ AI 分析：蛋液卵磷脂（lecithin）形成光滑乳化薄膜，蛋黃蛋白質與糖進行額外梅納反應，賦予紅豆麵包最具特色的金黃光澤感。';
+      if(bt>=175)return'✓ AI 分析：梅納反應在 140°C 起始，生成吡嗪、呋喃等數百種香氣化合物，形成金黃色澤。建議開啟蛋液可提升光澤。';
+      return'📖 AI 建議：烤箱溫度 175-210°C、時間 20-30 分鐘，開啟蛋液可獲得最佳金黃光澤效果。';
+    }
+  }
+
+  function runSim(){
+    if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+    var pr=calcP(),bake=curTab===1,start=null,dur=3000;
+    var btn=document.getElementById('runBtn'),dot=document.getElementById('pdot');
+    btn.textContent='AI 模擬中...';btn.disabled=true;dot.style.background='#F0C050';
+    function step(ts){
+      if(!start)start=ts;
+      var raw=Math.min(1,(ts-start)/dur);
+      var p=raw<0.5?2*raw*raw:1-Math.pow(-2*raw+2,2)/2;
+      drawExt('extC',pr.vol,pr.co2,pr.cs,p,bake,pr.burnt,pr.steam,pr.egg);
+      drawCS(pr.vol,pr.co2,pr.cs,p,bake,pr.burnt);
+      updM(p,pr,bake);
+      var lbl='';
+      if(!bake){
+        if(p<0.22)lbl='AI 偵測：酵母活化，CO₂ 開始產生...';
+        else if(p<0.52)lbl='AI 計算：麵筋網絡膨脹，氣泡逐漸形成';
+        else if(p<0.82)lbl='AI 預測：旺盛發酵，體積持續增大';
+        else lbl=pr.co2<0.2?'⚠ AI 警示：發酵不足':'✓ AI 確認：發酵完成！';
+      }else{
+        if(p<0.22)lbl='AI 偵測：進入烤箱，水分蒸發...';
+        else if(p<0.48)lbl='AI 計算：Oven spring，澱粉糊化膨脹';
+        else if(p<0.75)lbl='AI 模擬：梅納反應啟動，金黃色澤形成...';
+        else lbl=pr.burnt?'⚠ AI 警示：烤焦！':pr.cs<0.22?'⚠ AI 警示：烘焙不足':'✓ AI 確認：出爐！'+(pr.egg?' 蛋液光澤完美！':'');
+      }
+      document.getElementById('phl').textContent=lbl;
+      if(raw<1){rafId=requestAnimationFrame(step);}
+      else{btn.textContent='▶ 重新 AI 模擬';btn.disabled=false;dot.style.background='#2E7D52';document.getElementById('noteBox').textContent=getNote(pr,bake);}
+    }
+    rafId=requestAnimationFrame(step);
+  }
+
+  var heroT=0;
+  function heroAnim(){
+    heroT+=0.016;
+    var breathe=0.8+Math.sin(heroT*1.1)*0.11;
+    drawExt('heroC',breathe*1.5,0.62,0,breathe*0.86,false,false,false,false);
+    requestAnimationFrame(heroAnim);
+  }
+
+  return{switchTab:switchTab,sync:sync,runSim:runSim,heroAnim:heroAnim};
+})();
+
+G.sync();
+G.heroAnim();
+</script>
+</body>
+</html>
